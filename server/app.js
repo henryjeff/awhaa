@@ -31,6 +31,7 @@ console.log("Connected to cluster")
 console.log(`Connecition established in ${d_time} ms`)
 
 app.use('/api', routes.users)
+app.use('/api', routes.meals)
 
 
 module.exports = app;

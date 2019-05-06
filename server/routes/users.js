@@ -27,7 +27,7 @@ router.post('/users/', function(req, res, next){
     if (err) {
       res.send(err);
     } else {
-      res.send({ message: 'User created!' });
+      res.send({ message: 'User created' });
     }
   })
 })
