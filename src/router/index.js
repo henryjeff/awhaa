@@ -1,17 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/components/Welcome'
-import Search from '@/components/Search'
-import Dash from '@/components/Dash'
-import Event from '@/components/EventDisplay'
-import GoogleSignIn from '@/components/GoogleSignIn'
-import Map from '@/components/Map'
-import EventCreate from '@/components/EventCreate'
+import Index from '@/pages/Welcome'
+import SignIn from '@/pages/SignIn'
+import SignOut from '@/pages/SignOut'
+import Home from '@/pages/home'
+import Error from '@/pages/error'
+// import Search from '@/components/Search'
+// import Dash from '@/components/Dash'
+// import Event from '@/components/EventDisplay'
+// import Map from '@/components/Map'
+// import EventCreate from '@/components/EventCreate'
+import { IonicVueRouter } from '@ionic/vue';
 
-Vue.use(Router)
+Vue.use(IonicVueRouter);
 
-export default new Router({
+export default new IonicVueRouter({
   mode: 'history',
+  // base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
@@ -19,35 +24,50 @@ export default new Router({
       component: Index
     },
     {
-      path: '/googlesignin',
-      name: 'Google Sign In',
-      component: GoogleSignIn
+      path: '/signin',
+      name: 'Sign In',
+      component: SignIn
     },
     {
-      path: '/search',
-      name: 'Search Cleanup',
-      component: Search
+      path: '/signout',
+      name: 'Sign Out',
+      component: SignOut
     },
     {
-      path: '/dash',
-      name: 'Dashboard',
-      component: Dash
+      path: '/home',
+      name: 'Home',
+      component: Home
     },
     {
-      path: '/event/:eventName/:publicID/:eventLoc/',
-      name: 'EventDisplay',
-      component: Event,
-      props: true
+      path: '/error',
+      name: 'Error',
+      component: Error
     },
-    {
-      path: '/map',
-      name: 'MapTest',
-      component: Map
-    },
-    {
-      path: '/eventcreate',
-      name: 'Event Create',
-      component: EventCreate
-    }
+    // {
+    //   path: '/search',
+    //   name: 'Search Cleanup',
+    //   component: Search
+    // },
+    // {
+    //   path: '/dash',
+    //   name: 'Dashboard',
+    //   component: Dash
+    // },
+    // {
+    //   path: '/event/:eventName/:publicID/:eventLoc/',
+    //   name: 'EventDisplay',
+    //   component: Event,
+    //   props: true
+    // },
+    // {
+    //   path: '/map',
+    //   name: 'MapTest',
+    //   component: Map
+    // },
+    // {
+    //   path: '/eventcreate',
+    //   name: 'Event Create',
+    //   component: EventCreate
+    // }
   ]
 })

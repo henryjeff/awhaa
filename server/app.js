@@ -6,27 +6,31 @@ const logger = require('morgan');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 
-var db = require('./db.js');
+const mongo_uri = require('../config/.env').MONGODB_URI
 
-// var locationsRouter = require('./routes/locations');
-// var usersRouter = require('./routes/users');
-// var eventsRouter = require('./routes/events');
+var routes = require('./routes.js')
 
 var app = express();
-var router = express.Router()
-
-app.use(logger('combined'))
-
 app.use(logger('dev'));
+app.use(logger('combined'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var mongoose = require('mongoose');
 
-// app.use('/', usersRouter);
-// app.use('/', locationsRouter);
-// app.use('/', eventsRouter);
+console.log("Establishing Connection...")
+
+var s_time = process.hrtime()[1];
+mongoose.connect(mongo_uri, {useNewUrlParser: true});
+
+var d_time = (process.hrtime()[1] - s_time) / 1000000;
+
+console.log("Connected to cluster")
+console.log(`Connecition established in ${d_time} ms`)
+
+app.use('/api', routes.users)
 
 
 module.exports = app;

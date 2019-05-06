@@ -1,55 +1,35 @@
-var express = require('express');
-var router = express.Router();
-var mongoUtil = require('../database/db.js');
+var router = require('express').Router();
 
+var User = require('../models/user.js');
 
-//get user
-router.get('/api/user', function(req, res, next){
-  var id_token = req.query['id_token'];
-  var db = mongoUtil.getDb();
-  var result_cursor = db.collection('cc_users').findOne({id_token: id_token});
-  result_cursor.then(function(result){
-    res.send(result);
-  })
+// Get user
+router.get('/users/:_id/', function(req, res, next){
+  User.findById(req.params._id, function(err, user) {
+      if (err) {
+        res.send({ message: 'No user found' });
+      } else {
+        res.send(user);
+      }
+  });
 })
 
+// Post User
+router.post('/users/', function(req, res, next){
+  var user = new User();
 
-//create user
-router.post('/api/user', function(req, res, next){
-  var id_token = req.query['id_token'];
-  var name = req.query['name'];
-  var email = req.query['email'];
-  var organizer = req.query['organizer'];
-  var user = {
-    "id_token":parseInt(id_token),
-    "name":name,
-    "email":email,
-    "organizer": organizer=='true'
-  };
-  var db = mongoUtil.getDb();
-  var result_cursor = db.collection('cc_users').findOne({id_token: id_token});
-  result_cursor.then(function(result){
-    var found = false;
-    var users = db.collection('cc_users').find();
-    users.forEach(function(doc){
-      console.log(doc);
-      if(doc['id_token'] == parseInt(id_token)){
-        found = true;
-      }
-    });
-    console.log(found);
-    if(!found){
-      db.collection('cc_users').insertOne(user);
-      console.log("successfully added user to database");
-      res.send('success');
+  user.gid = req.body.gid
+  user.username = req.body.username;
+  user.email = req.body.email;
+  user.name.first = req.body.first;
+  user.name.last = req.body.last;
+
+  user.save(function(err) {
+    if (err) {
+      res.send(err);
     } else {
-      console.log(result_cursor)
-      console.log("could not add user to database");
-      res.send('error');
+      res.send({ message: 'User created!' });
     }
   })
-
-
 })
 
 module.exports = router;

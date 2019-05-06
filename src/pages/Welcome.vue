@@ -1,29 +1,28 @@
 <template>
-  <ion-app>
-    <ion-page class="show-page">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Welcome</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="content" padding>
-        <template>
-          <ion-list>
-            <ion-thumbnail slot="start">
-              <img class='big-logo' :src='logo'></img>
-            </ion-thumbnail>
-          </ion-list>
-        </template>
-        <ion-title>Choose an Account type</ion-title>
-        <ion-label>Makes Your Beach/City/Park Litter Cleanups Smart!</ion-label>
-        <ion-label></ion-label>
-        <ion-button @click="goToLoginAsOrganizer"><i class="fas fa-sitemap"></i> Organizer</ion-button>
-        <ion-row style="height:2px"/>
-        <ion-button @click="goToLogin" ><i class="fas fa-hands-helping"></i>Volunteer</ion-button>
-      </ion-content>
-    </ion-page>
-  </ion-app>
+  <div class="ion-page">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Welcome</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="content" padding>
+      <template>
+        <ion-list>
+          <ion-thumbnail slot="start">
+            <img class='big-logo' :src='logo'></img>
+          </ion-thumbnail>
+        </ion-list>
+      </template>
+      <ion-title>Choose an Account type</ion-title>
+      <ion-label>Makes Your Beach/City/Park Litter Cleanups Smart!</ion-label>
+      <ion-label></ion-label>
+      <ion-button @click="goToLoginAsOrganizer"><i class="fas fa-sitemap"></i> Organizer</ion-button>
+      <ion-row style="height:2px"/>
+      <ion-button @click="goToLogin" ><i class="fas fa-hands-helping"></i>Volunteer</ion-button>
+    </ion-content>
+  </div>
 </template>
+
 <script>
 import Logo from "@/img/logo.png"
 export default {
@@ -48,13 +47,13 @@ export default {
       this.$session.destroy()
       this.$session.start()
       this.$session.set('is_organizer', false)
-      this.$router.push('/googlesignin')
+      this.$router.push('/signin')
     },
     goToLoginAsOrganizer () {
       this.$session.destroy()
       this.$session.start()
       this.$session.set('is_organizer', true)
-      this.$router.push('/googlesignin')
+      this.$router.push('/signin')
     }
   }
 }
