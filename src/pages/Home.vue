@@ -12,14 +12,20 @@
       <ion-title>
         <p style="font-size:14px;">to continue with Clean Up Crew</p>
       </ion-title>
+      <NextMeal/>
     </ion-content>
   </div>
 </template>
 
 <script>
 
+import NextMeal from '@/components/NextMeal'
+
 export default {
   name: "Home",
+  components: {
+    NextMeal
+  }
 }
 </script>
 

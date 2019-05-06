@@ -3,8 +3,8 @@ var router = require('express').Router();
 var User = require('../models/user.js');
 
 // Get user
-router.get('/users/:_id/', function(req, res, next){
-  User.findById(req.params._id, function(err, user) {
+router.get('/users/:gid/', function(req, res, next){
+  User.findOne({gid : req.params.gid}, function(err, user) {
       if (err) {
         res.send({ message: 'No user found' });
       } else {

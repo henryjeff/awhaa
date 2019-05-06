@@ -34,7 +34,9 @@ export default {
 
       axios.get(`/api/users/${user.gid}`)
         .then((response) => {
-          if(response.data.message == "No user found"){
+          console.log(response.data.gid)
+          console.log(user.gid)
+          if(response.data.gid != user.gid){
             axios.post("/api/users/", user)
                 .then((response) => {
                     this.$session.set('session_id', user.gid)

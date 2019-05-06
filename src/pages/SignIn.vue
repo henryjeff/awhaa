@@ -10,7 +10,7 @@
         Sign In with Google
       </ion-title>
       <ion-title>
-        <p style="font-size:14px;">to continue with Clean Up Crew</p>
+        <p style="font-size:14px;">to continue with awhaa</p>
       </ion-title>
       <GoogleSignInButton/>
     </ion-content>
