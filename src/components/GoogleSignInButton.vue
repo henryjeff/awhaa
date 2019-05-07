@@ -1,11 +1,13 @@
 <template>
-  <g-signin-button
-    :params="googleSignInParams"
-    @success="onSignInSuccess"
-    @error="onSignInError">
-    <i class="fab fa-google"></i>
-    Sign in with Google
-  </g-signin-button>
+  <ion-button shape="round" fill="outline">
+    <g-signin-button
+      :params="googleSignInParams"
+      @success="onSignInSuccess"
+      @error="onSignInError">
+      <i class="fab fa-google"></i>
+      Sign in with Google
+    </g-signin-button>
+  </ion-button>
 </template>
 
 <script>
@@ -34,8 +36,6 @@ export default {
 
       axios.get(`/api/users/${user.gid}`)
         .then((response) => {
-          console.log(response.data.gid)
-          console.log(user.gid)
           if(response.data.gid != user.gid){
             axios.post("/api/users/", user)
                 .then((response) => {
@@ -71,19 +71,5 @@ export default {
   width:30%;
   margin-top: 20px;
   margin-bottom: 20px;
-}
-.g-signin-button {
-  /* This is where you control how the button looks. Be creative! */
-  display: inline-block;
-  padding: 15px 15px;
-  border-radius: 50px;
-  background-color: #3c82f7;
-  color: #fff;
-  margin-top: 10px;
-  /* box-shadow: 0 3px 0 #0f69ff; */
-  font-size: 16px;
-}
-.fa-google{
-  padding-right:10px;
 }
 </style>

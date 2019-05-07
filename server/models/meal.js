@@ -7,17 +7,17 @@ var Meal = new Schema({
     ref: 'User'
   },
   name: String,
+  calories: Number,
   prep: {
     steps: Array,
     time_min: Number
   },
-  calories: Number,
-  regular_timing: {
+  meal_times: [{
        type: String,
-       enum : ['Breakfast','Brunch','Lunch','Linner','Dinner','Snack','Ambiguous'],
-       default: 'Ambiguous'
-   },
-  days_good: Number
+       enum : ['breakfast','brunch','lunch','linner','dinner','snack'],
+       default: 'snack'
+   }],
+  shelf_life: Number
 });
 
 module.exports = mongoose.model('Meal', Meal);

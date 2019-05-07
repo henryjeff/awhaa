@@ -16,6 +16,7 @@
     </ion-content>
   </div>
 </template>
+
 <script>
 
 import GoogleSignInButton from '@/components/GoogleSignInButton'

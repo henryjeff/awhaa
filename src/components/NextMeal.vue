@@ -102,6 +102,7 @@ export default {
 <style>
 .card{
   border-radius: 10px;
+  text-align: left;
 }
 
 .progress-bar-determinate{
@@ -111,12 +112,12 @@ export default {
 
 .meal-timer {
   border-top: 1px solid #dddddd;
+  padding-top: 10px;
 }
 
 .timer-label{
   color: #3880ff;
   margin-bottom: 4px;
-  text-align: left;
   padding-left: 16px;
 }
 

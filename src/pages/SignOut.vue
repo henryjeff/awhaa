@@ -8,13 +8,13 @@ export default {
     if (this.$session.exists()) {
       if(this.$session.has('session_id') == true){
         this.$session.destroy()
-        this.$router.push("/");
+        let self = this
+        self.$router.push("/");
       } else {
         console.log("Error Signing out")
         this.$router.push("/error");
       }
-    }
-    if (!this.$session.exists()) {
+    } else {
       this.$router.push("/");
     }
   },

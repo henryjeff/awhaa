@@ -11,6 +11,14 @@
   text-align: left;
 }
 
+.button.button-md {
+  text-transform: none;
+  font-size: 16px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/*
 .content{
   background-color: #F5F5F5;
-}
+} */

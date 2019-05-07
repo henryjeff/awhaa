@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/pages/Welcome'
+import Index from '@/pages/Index'
 import SignIn from '@/pages/SignIn'
 import SignOut from '@/pages/SignOut'
 import Home from '@/pages/home'
 import Error from '@/pages/error'
+import CreateMeal from '@/pages/CreateMeal'
+import UserSettings from '@/pages/UserSettings'
 // import Search from '@/components/Search'
 // import Dash from '@/components/Dash'
 // import Event from '@/components/EventDisplay'
@@ -16,7 +18,7 @@ Vue.use(IonicVueRouter);
 
 export default new IonicVueRouter({
   mode: 'history',
-  // base: process.env.BASE_URL,
+  base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
@@ -37,6 +39,16 @@ export default new IonicVueRouter({
       path: '/home',
       name: 'Home',
       component: Home
+    },
+    {
+      path: '/createmeal',
+      name: 'Create Meal',
+      component: CreateMeal
+    },
+    {
+      path: '/user/:username',
+      name: 'User Settings',
+      component: UserSettings
     },
     {
       path: '/error',

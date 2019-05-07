@@ -8,7 +8,11 @@ router.get('/users/:gid/', function(req, res, next){
       if (err) {
         res.send({ message: 'No user found' });
       } else {
-        res.send(user);
+        if(!user){
+          res.send({ message: 'No user found'});
+        } else {
+          res.send(user);
+        }
       }
   });
 })
