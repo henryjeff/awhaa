@@ -2,19 +2,29 @@
   <div class="ion-page">
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button primary @click="cancelCreation">
+            <ion-icon slot="icon-only" color="primary" name="arrow-back"></ion-icon>
+          </ion-button>
+        </ion-buttons>
         <ion-title>Create a meal</ion-title>
+        <ion-buttons slot="end">
+          <ion-button primary>
+            <ion-icon slot="icon-only" color="primary" name="information-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content class="content" padding>
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle>Meal Template maker</ion-card-subtitle>
-          <ion-card-title>Create a Meal</ion-card-title>
+          <ion-card-title style="text-align:left!important;">Create a Meal</ion-card-title>
+          <ion-card-subtitle style="text-align:left!important;">Meal Template maker</ion-card-subtitle>
         </ion-card-header>
         <!-- <hr> -->
         <ion-card-content>
           <ion-list>
-            <ion-card-subtitle>Basic info</ion-card-subtitle>
+            <ion-card-subtitle style="text-align:left!important;">Basic info</ion-card-subtitle>
             <ion-item>
               <ion-label class="input-label">Name : </ion-label>
               <ion-input placeholder="Ex: Chicken Salad" :value="name" @input="name = $event.target.value"></ion-input>
@@ -37,7 +47,7 @@
           </ion-list>
           <br>
           <ion-list>
-            <ion-card-subtitle>Preperation</ion-card-subtitle>
+            <ion-card-subtitle style="text-align:left!important;">Preperation</ion-card-subtitle>
             <ion-item>
               <ion-label class="input-label">Shelf Life : </ion-label>
               <ion-input placeholder="Ex: 5 days" type="number" :value="shelf_life" @input="shelf_life = $event.target.value"></ion-input>
@@ -48,6 +58,7 @@
             </ion-item>
             <ion-item>
               <ion-label class="input-label">Preperation Steps</ion-label>
+              <ion-input/>
               <ion-button class="step-add" shape="round" fill="outline" @click="addStep" primary>+</ion-button>
             </ion-item>
             <ion-item v-for="(step, index) in prep_steps" v-bind:key="index">
@@ -55,11 +66,11 @@
               <ion-input placeholder="Step Description" :value="step.value" @input="step.value = $event.target.value"></ion-input>
             </ion-item>
           </ion-list>
-          <br>
-          <ion-item>
-            <ion-button class="create-meal" shape="round" fill="outline" @click="createMeal">Create</ion-button>
-            <ion-button class="cancel-meal" shape="round" fill="outline" @click="cancelCreation">Cancel</ion-button>
-          </ion-item>
+          <ion-buttons class="meal-buttons">
+              <ion-button class="create-meal" shape="round" fill="outline" color="primary" @click="createMeal">Create</ion-button>
+              <ion-button class="cancel-meal" shape="round" fill="outline" color="medium" @click="cancelCreation">Cancel</ion-button>
+            <!-- </ion-item> -->
+          </ion-buttons>
        </ion-card-content>
      </ion-card>
     </ion-content>
@@ -67,11 +78,10 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "CreateMeal",
-  // components: {
-  //   NextMeal
-  // }
   data() {
     return {
       name: null,
@@ -79,7 +89,8 @@ export default {
       meal_times: [],
       shelf_life: null,
       prep_time: null,
-      prep_steps: []
+      prep_steps: [],
+      loading: false
     }
   },
   methods: {
@@ -89,9 +100,118 @@ export default {
     cancelCreation() {
       this.$router.push("/home")
     },
+    startLoading () {
+      this.loading = true
+      return this.$ionic.loadingController
+        .create({
+          message: 'Loading',
+          duration: 1000,
+        })
+        .then(l => {
+          this.checkLoading(l)
+          return l.present()
+        })
+    },
+    async successToast (message) {
+      const toast = await this.$ionic.toastController.create({
+        message: message,
+        color: "primary",
+        duration: 3000
+      })
+      await toast.present();
+    },
+    async failToast (message) {
+      const toast = await this.$ionic.toastController.create({
+        message: message,
+        color: "danger",
+        duration: 3000
+      })
+      await toast.present();
+    },
+    checkLoading(loader) {
+      let self = this
+      if(this.loading == true){
+        setTimeout(function() {
+          self.checkLoading(loader)
+        }, 50)
+      } else {
+        loader.dismiss()
+      }
+    },
     createMeal() {
-      console.log(this.meal_times)
-      // this.$router.push("/home")
+      var prep_steps = []
+
+      this.prep_steps.forEach(function(step) {
+        prep_steps.push(step.value)
+      })
+
+      var status = ""
+
+      if(this.name == null || this.name == ""){
+        status += "• Invalid name\n"
+      }
+      if(this.calories == null || this.calories < 0){
+        status += "• Invalid amount of calories\n"
+      }
+      if(this.meal_times.length < 1){
+        status += "• Invalid number of meal times\n"
+      }
+      if(this.shelf_life == null || this.shelf_life < 1){
+        status += "• Invalid shelf life\n"
+      }
+      if(this.prep_time == null || this.prep_time < 0){
+        status += "• Invalid prep time\n"
+      }
+
+      if(status != ""){
+        this.failToast("Failed to create meal for the following reasons:\n" + status)
+        return
+      }
+
+      var meal = {
+        user_id: null,
+        name: this.name,
+        prep: {
+          steps: this.prep_steps,
+          time_min: this.prep_time
+        },
+        calories: this.calories,
+        meal_times: this.meal_times,
+        shelf_life: this.shelf_life
+      }
+
+      this.startLoading()
+
+      let self = this
+
+      axios.get(`/api/users/${self.$session.get("session_id")}`)
+        .then((response) => {
+          if(response.data.gid != self.$session.get("session_id")){
+            console.log("Request Error: Bad request from session id")
+            console.log(errors)
+            this.$router.push('/error')
+          } else {
+            meal.user_id = response.data._id
+            axios.post("/api/meals/", meal)
+                .then((response) => {
+                    this.loading = false
+                    this.successToast("Successfully created meal")
+                    this.$router.push('/home')
+                })
+                .catch((errors) => {
+                    this.loading = false
+                    console.log("Database Error: Creating Meal")
+                    console.log(errors)
+                    this.$router.push('/error')
+                })
+          }
+        })
+        .catch((errors) => {
+          this.loading = false
+          console.log("Database Error: Getting User")
+          console.log(errors)
+          this.$router.push('/error')
+        })
     }
   }
 }
@@ -105,6 +225,12 @@ export default {
 .step-add{
   border-radius: 20px;
 }
+
+.meal-buttons{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .cancel-meal{
   padding-left: 5px;
   width: 100%;
