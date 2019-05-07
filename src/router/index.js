@@ -6,6 +6,7 @@ import SignOut from '@/pages/SignOut'
 import Home from '@/pages/home'
 import Error from '@/pages/error'
 import CreateMeal from '@/pages/CreateMeal'
+import AddPreppedMeal from '@/pages/AddPreppedMeal'
 import UserSettings from '@/pages/UserSettings'
 // import Search from '@/components/Search'
 // import Dash from '@/components/Dash'
@@ -44,6 +45,11 @@ export default new IonicVueRouter({
       path: '/createmeal',
       name: 'Create Meal',
       component: CreateMeal
+    },
+    {
+      path: '/addpreppedmeal',
+      name: 'Add Prepared Meal',
+      component: AddPreppedMeal
     },
     {
       path: '/user/:username',

@@ -10,6 +10,7 @@ export default {
         this.$session.destroy()
         let self = this
         self.$router.push("/");
+        return
       } else {
         console.log("Error Signing out")
         this.$router.push("/error");

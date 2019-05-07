@@ -2,13 +2,15 @@
   <div class="ion-page">
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button primary @click="toSignOut">
+            <ion-icon slot="icon-only" color="primary" name="arrow-back"></ion-icon>
+          </ion-button>
+        </ion-buttons>
         <ion-buttons slot="primary">
           <ion-button primary @click="toUserSettings">
             <ion-icon slot="icon-only" color="primary" name="contact"></ion-icon>
           </ion-button>
-          <!-- <ion-button primary @click="toCreateMeal">
-            <ion-icon slot="icon-only" color="primary" name="add"></ion-icon>
-          </ion-button> -->
         </ion-buttons>
         <ion-title>Dashboard</ion-title>
       </ion-toolbar>
@@ -19,17 +21,18 @@
           <ion-icon name="restaurant"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
-          <ion-fab-button><ion-icon name="add" @click="toCreateMeal"></ion-icon></ion-fab-button>
+          <ion-fab-button><ion-icon name="add" @click="toAddMeal"></ion-icon></ion-fab-button>
           <ion-fab-button><ion-icon name="create" @click="toCreateMeal"></ion-icon></ion-fab-button>
         </ion-fab-list>
       </ion-fab>
 
       <ion-title>
-        Sign in to the home of the google
+        Welcome back {{first_name}}
       </ion-title>
       <ion-title>
-        <p style="font-size:14px;">to continue with Clean Up Crew</p>
+        <p style="font-size:14px;">Today's going to be great!</p>
       </ion-title>
+      <SummerCountdown/>
       <NextMeal/>
     </ion-content>
   </div>
@@ -37,10 +40,28 @@
 
 <script>
 import NextMeal from '@/components/NextMeal'
+import SummerCountdown from '@/components/SummerCountdown'
 import axios from "axios";
 
 export default {
   name: "Home",
+  data () {
+    return {
+      loading: false,
+      first_name: ""
+    }
+  },
+  beforeCreate() {
+    axios.get(`/api/users/${this.$session.get('session_id')}`)
+      .then((response) => {
+        this.first_name = response.data.name.first
+      })
+      .catch((errors) => {
+        console.log("Database Error: Getting User")
+        console.log(errors)
+        this.$router.push('/error')
+      })
+  },
   methods: {
     toUserSettings() {
       axios.get(`/api/users/${this.$session.get('session_id')}`)
@@ -55,18 +76,39 @@ export default {
     },
     toCreateMeal() {
       this.$router.push('/createmeal')
-    }
+    },
+    toAddMeal() {
+      this.$router.push('/addpreppedmeal')
+    },
+    toSignOut () {
+      return this.$ionic.loadingController
+        .create({
+          message: 'Loading',
+          duration: 1000,
+        })
+        .then(l => {
+          this.checkIfSignedOut(l)
+          this.$router.push('/signout')
+          return l.present()
+        })
+    },
+    checkIfSignedOut(loader) {
+      if(!this.$session.exists()){
+        setTimeout(function() {
+          this.checkIfSignedOut(loader)
+        }, 50)
+      } else {
+        loader.dismiss()
+      }
+    },
   },
   components: {
-    NextMeal
+    NextMeal,
+    SummerCountdown
   }
 }
 </script>
 
 <style>
-
-.ion-md-time{
-	color: red !important;
-}
 
 </style>

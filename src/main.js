@@ -41,7 +41,8 @@ Vue.config.ignoredElements = [
   'ion-fab-button',
   'ion-fab-list',
   'ion-select',
-  'ion-select-option'
+  'ion-select-option',
+  'ion-searchbar'
 ]
 
 Vue.config.productionTip = false
