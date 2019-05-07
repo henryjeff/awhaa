@@ -48,31 +48,12 @@ export default {
   data () {
     return {
       loading: false,
-      first_name: ""
+      first_name: this.$session.get("user").name.first
     }
-  },
-  beforeCreate() {
-    axios.get(`/api/users/${this.$session.get('session_id')}`)
-      .then((response) => {
-        this.first_name = response.data.name.first
-      })
-      .catch((errors) => {
-        console.log("Database Error: Getting User")
-        console.log(errors)
-        this.$router.push('/error')
-      })
   },
   methods: {
     toUserSettings() {
-      axios.get(`/api/users/${this.$session.get('session_id')}`)
-        .then((response) => {
-          this.$router.push("/user/" + response.data.username);
-        })
-        .catch((errors) => {
-          console.log("Database Error: Getting User")
-          console.log(errors)
-          this.$router.push('/error')
-        })
+      this.$router.push("/user/" + this.$session.get("user").username);
     },
     toCreateMeal() {
       this.$router.push('/createmeal')

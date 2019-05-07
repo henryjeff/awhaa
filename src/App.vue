@@ -18,6 +18,20 @@ export default {
     checkSession() {
       if(!this.$session.exists()){
         this.$router.push("/")
+      } else {
+        if(this.$session.get('session_id') == undefined){
+          this.$router.push("/")
+        } else {
+          axios.get(`/api/users/${this.$session.get('session_id')}`)
+          .then((response) => {
+            this.$store.user = response.data
+          })
+          .catch((errors) => {
+            console.log("Database Error: Getting User")
+            console.log(errors)
+            this.$router.push('/error')
+          })
+        }
       }
     }
   }

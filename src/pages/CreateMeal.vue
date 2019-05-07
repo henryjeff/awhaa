@@ -184,34 +184,19 @@ export default {
 
       let self = this
 
-      axios.get(`/api/users/${self.$session.get("session_id")}`)
-        .then((response) => {
-          if(response.data.gid != self.$session.get("session_id")){
-            console.log("Request Error: Bad request from session id")
-            console.log(errors)
-            this.$router.push('/error')
-          } else {
-            meal.user_id = response.data._id
-            axios.post("/api/meals/", meal)
-                .then((response) => {
-                    this.loading = false
-                    this.successToast("Successfully created meal")
-                    this.$router.push('/home')
-                })
-                .catch((errors) => {
-                    this.loading = false
-                    console.log("Database Error: Creating Meal")
-                    console.log(errors)
-                    this.$router.push('/error')
-                })
-          }
-        })
-        .catch((errors) => {
-          this.loading = false
-          console.log("Database Error: Getting User")
-          console.log(errors)
-          this.$router.push('/error')
-        })
+      meal.user_id = this.$session.get('user')._id
+      axios.post("/api/meals/", meal)
+          .then((response) => {
+              this.loading = false
+              this.successToast("Successfully created meal")
+              this.$router.push('/home')
+          })
+          .catch((errors) => {
+              this.loading = false
+              console.log("Database Error: Creating Meal")
+              console.log(errors)
+              this.$router.push('/error')
+          })
     }
   }
 }

@@ -4,6 +4,7 @@ import Ionic from '@ionic/vue';
 import GSignInButton from 'vue-google-signin-button'
 import VueSession from 'vue-session'
 import { VueSpinners } from '@saeris/vue-spinners'
+import { store } from './store/store'
 
 import '@ionic/core/css/ionic.bundle.css';
 import style from './index.css'
@@ -47,6 +48,8 @@ Vue.config.ignoredElements = [
 
 Vue.config.productionTip = false
 
+
+
 // new Vue({
 //   el: '#app',
 //   router,
@@ -55,5 +58,6 @@ Vue.config.productionTip = false
 // })
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app');

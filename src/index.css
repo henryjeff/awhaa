@@ -8,7 +8,7 @@
 /* } */
 
 .card-header, .card-content{
-  text-align: left;
+  text-align: left !important;
 }
 
 .button.button-md {

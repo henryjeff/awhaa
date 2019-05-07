@@ -40,6 +40,7 @@ export default {
             axios.post("/api/users/", user)
                 .then((response) => {
                     this.$session.set('session_id', user.gid)
+                    this.$session.set('user', response.data)
                     this.$router.push('/home')
                 })
                 .catch((errors) => {
@@ -49,6 +50,7 @@ export default {
                 })
           } else {
             this.$session.set('session_id', user.gid)
+            this.$session.set('user', response.data)
             this.$router.push('/home')
           }
         })

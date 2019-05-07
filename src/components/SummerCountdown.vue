@@ -1,6 +1,6 @@
 <template>
   <ion-card>
-    <ion-card-subtitle style="padding:16px; padding-bottom: 10px;">Summer Countdown</ion-card-subtitle>
+    <ion-card-title style="padding:16px; padding-bottom: 10px;">Summer Countdown</ion-card-title>
     <ion-label class="countdown-label" primary>
       {{days_left}} days left
     </ion-label>
