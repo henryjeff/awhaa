@@ -18,7 +18,24 @@
   padding-bottom: 10px;
 }
 
-/*
-.content{
-  background-color: #F5F5F5;
+.sc-ion-card-md-h {
+  box-shadow:none;
+  /* -webkit-box-shadow: 0 3px 3px -2px rgba(0,0,0,.2), 0 3px 3px 0 rgba(0,0,0,.14), 0 3px 3px 0 rgba(0,0,0,.12); */
+  -webkit-box-shadow: 0 3px 3px -2px rgba(0,0,0,.2), 0 0.5px 0.5px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.header-md {
+  -webkit-box-shadow: 0 3px 3px -2px rgba(0,0,0,.2)!important;
+}
+.header-md:after{
+  background-image: none!important;
+}
+
+
+/* .content{
+  background-color: #F1F1F1;
 } */
+
+:host {
+  --background: #F1F1F1;
+}
