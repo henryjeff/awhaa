@@ -57,35 +57,9 @@ export default new IonicVueRouter({
       component: UserSettings
     },
     {
-      path: '/error',
+      path: '/error/:code',
       name: 'Error',
       component: Error
     },
-    // {
-    //   path: '/search',
-    //   name: 'Search Cleanup',
-    //   component: Search
-    // },
-    // {
-    //   path: '/dash',
-    //   name: 'Dashboard',
-    //   component: Dash
-    // },
-    // {
-    //   path: '/event/:eventName/:publicID/:eventLoc/',
-    //   name: 'EventDisplay',
-    //   component: Event,
-    //   props: true
-    // },
-    // {
-    //   path: '/map',
-    //   name: 'MapTest',
-    //   component: Map
-    // },
-    // {
-    //   path: '/eventcreate',
-    //   name: 'Event Create',
-    //   component: EventCreate
-    // }
   ]
 })
