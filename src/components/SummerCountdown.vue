@@ -2,7 +2,7 @@
   <ion-card>
     <ion-card-title style="padding:16px; padding-bottom: 10px;">Summer Countdown</ion-card-title>
     <ion-label class="countdown-label" primary>
-      {{days_left}} days left
+      {{days_left}} days left - {{Math.round(value * 100)}}% done!
     </ion-label>
     <div class="countdown-bar">
       <ion-progress-bar color="danger" v-bind:value="value" v-bind:buffer="buffer"></ion-progress-bar>

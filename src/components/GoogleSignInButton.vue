@@ -1,17 +1,21 @@
 <template>
-  <ion-button shape="round" fill="outline">
-    <g-signin-button
-      :params="googleSignInParams"
-      @success="onSignInSuccess"
-      @error="onSignInError">
-      <i class="fab fa-google"></i>
-      Sign in with Google
-    </g-signin-button>
-  </ion-button>
+  <div>
+    <div v-on:start-loading="si()"/>
+    <ion-button shape="round" fill="outline">
+      <g-signin-button
+        :params="googleSignInParams"
+        @success="onSignInSuccess"
+        @error="onSignInError">
+        <i class="fab fa-google"></i>
+        Sign in with Google
+      </g-signin-button>
+    </ion-button>
+  </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
+import { EventBus } from '../events';
 
 export default {
   name: "GoogleSignInButton",
@@ -19,12 +23,17 @@ export default {
     return {
       googleSignInParams: {
         client_id: '889061426778-8stvujmooeeuduncj5f3ouiep7iplt1r.apps.googleusercontent.com'
-      }
+      },
+      loading: false
     }
   },
   methods: {
     onSignInSuccess (googleUser) {
       const profile = googleUser.getBasicProfile()
+
+      if(this.$session.exists()){
+        this.$session.destroy()
+      }
 
       var user = {
         gid: profile.Eea,
@@ -34,36 +43,26 @@ export default {
         email: profile.U3,
       }
 
-      axios.get(`/api/users/${user.gid}`)
+      EventBus.$emit('start-loading', {'self':this,'redirect':'/home'})
+
+      this.$store.dispatch("fetchUser", {'user':user,'signin':true})
         .then((response) => {
           if(response.data.gid != user.gid){
-            axios.post("/api/users/", user)
-                .then((response) => {
-                    this.$session.set('session_id', user.gid)
-                    this.$session.set('user', response.data)
-                    this.$router.push('/home')
-                })
-                .catch((errors) => {
-                    console.log("Database Error: Creating User")
-                    console.log(errors)
-                    this.$router.push('/error')
-                })
+            this.$store.dispatch("postUser", {'user':user})
+              .then((response) => {
+                this.$session.start()
+                this.loading = false;
+                this.$session.set('session_id', user.gid)
+              })
           } else {
+            this.$session.start()
+            this.loading = false;
             this.$session.set('session_id', user.gid)
-            this.$session.set('user', response.data)
-            this.$router.push('/home')
           }
-        })
-        .catch((errors) => {
-          console.log("Database Error: Getting User")
-          console.log(errors)
-          this.$router.push('/error')
         })
     },
     onSignInError (error) {
-      console.log("Google Error: Can't Sign In User")
-      console.log(error)
-      this.$router.push('/error')
+      this.$router.push('/error/ERR_GOOG_SIGN_IN')
     }
   }
 }
