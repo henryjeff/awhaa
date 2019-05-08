@@ -10,6 +10,7 @@ import '@ionic/core/css/ionic.bundle.css';
 import style from './index.css'
 import router from './router'
 
+global.router = router
 
 Vue.use(Ionic);
 Vue.use(VueSpinners)
@@ -48,7 +49,7 @@ Vue.config.ignoredElements = [
 
 Vue.config.productionTip = false
 
-
+export const EventBus = new Vue();
 
 // new Vue({
 //   el: '#app',
