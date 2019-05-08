@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button primary @click="toBack">
+          <ion-button primary @click="toRoute('/home')">
             <ion-icon slot="icon-only" color="primary" name="arrow-back"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -16,39 +16,17 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="content" padding>
-      <ion-button shape="round" fill="outline" @click="toSignOut">Sign Out</ion-button>
+      <ion-button shape="round" fill="outline" @click="toRoute('/signout')">Sign Out</ion-button>
     </ion-content>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "UserSettings",
   methods: {
-    toSignOut () {
-      return this.$ionic.loadingController
-        .create({
-          message: 'Loading',
-          duration: 1000,
-        })
-        .then(l => {
-          this.checkIfSignedOut(l)
-          this.$router.push('/signout')
-          return l.present()
-        })
-    },
-    checkIfSignedOut(loader) {
-      if(!this.$session.exists()){
-        setTimeout(function() {
-          this.checkIfSignedOut(loader)
-        }, 50)
-      } else {
-        loader.dismiss()
-      }
-    },
-    toBack() {
-      this.$router.push('/home')
+    toRoute(route){
+      this.$router.push(route)
     }
   }
 }

@@ -15,8 +15,8 @@
     </ion-content>
   </div>
 </template>
-<script>
 
+<script>
 export default {
   name: "Error",
   methods: {
@@ -26,7 +26,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style>

@@ -41,22 +41,20 @@
 <script>
 import NextMeal from '@/components/NextMeal'
 import SummerCountdown from '@/components/SummerCountdown'
-import axios from 'axios';
 
 export default {
   name: "Home",
   data () {
     return {
-      loading: false,
       first_name: ""
     }
   },
   methods: {
     toUserSettings() {
-      this.$router.push(`/user/${this.$store.state.user.username}`);
+      this.$router.push(`/user/${this.$store.state.user.username}`)
     },
     toRoute(route) {
-      this.$router.push(route);
+      this.$router.push(route)
     },
   },
   components: {

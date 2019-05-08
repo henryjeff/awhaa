@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { EventBus } from '../events';
 
 export default {
@@ -67,6 +66,7 @@ export default {
   }
 }
 </script>
+
 <style>
 .small-logo{
   width:30%;

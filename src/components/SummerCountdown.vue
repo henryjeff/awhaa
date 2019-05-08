@@ -11,7 +11,6 @@
 </template>
 
 <script>
-
 export default {
   name: "SummerCountdown",
   data () {
@@ -42,27 +41,23 @@ export default {
   }
 }
 </script>
+
 <style>
 .card{
   border-radius: 10px;
   text-align: left;
 }
-
 .progress-bar-determinate{
   height: 5px;
   border-radius: 10px;
 }
-
 .countdown-label{
   color: #F04141;
   margin-bottom: 4px;
   padding-left: 16px;
 }
-
 .countdown-bar{
   margin:16px;
   margin-top: 7px;
-  /* margin-bottom: 7px; */
 }
-
 </style>

@@ -14,7 +14,6 @@
 </template>
 
 <script>
-
 export default {
   name: "Index",
   beforeCreate: function () {
@@ -33,5 +32,4 @@ export default {
 </script>
 
 <style>
-
 </style>

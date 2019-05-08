@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { EventBus } from '../events';
 
 export default {
@@ -156,7 +155,7 @@ export default {
         meal_times: this.meal_times,
         shelf_life: this.shelf_life
       }
-      
+
       meal.user_id = this.$store.state.user._id
 
       EventBus.$emit('start-loading', {'self':this,'redirect':'/home'})
@@ -172,7 +171,6 @@ export default {
 </script>
 
 <style>
-
 .input-label{
   color: #222!important;
 }
@@ -195,8 +193,4 @@ export default {
   width: 100%;
   height: 30px;
 }
-/* .create-meal .cancel-meal{
-  width: 100%;
-} */
-
 </style>

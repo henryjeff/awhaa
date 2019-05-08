@@ -11,19 +11,16 @@
     </ion-content>
   </div>
 </template>
-<script>
 
+<script>
 export default {
   name: "AddPreppedMeal",
 }
-
 </script>
 
 <style>
-
 .searchbar-input.sc-ion-searchbar-md{
   border-radius: 100px!important;
   text-align: left!important;
 }
-
 </style>

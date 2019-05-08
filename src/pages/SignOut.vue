@@ -2,21 +2,24 @@
 </template>
 
 <script>
+import { EventBus } from '../events';
+
 export default {
   name: "SignOut",
+  data() {
+    return {
+      loading: false
+    }
+  },
   created () {
+    EventBus.$emit('start-loading', {'self':this,'redirect':'/'})
+
     if (this.$session.exists()) {
-      if(this.$session.has('session_id') == true){
-        this.$session.destroy()
-        this.$router.push('/');
-        return
-      } else {
-        console.log("Error Signing out")
-        this.$router.push('/error');
-      }
-    } else {
       this.$session.destroy()
-      this.$router.push('/');
+      this.loading = false
+      this.$router.push('/')
+    } else {
+      this.$router.push('/error/ERR_SIGN_OUT');
     }
   },
 }
