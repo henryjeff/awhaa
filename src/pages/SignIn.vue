@@ -2,6 +2,16 @@
   <div class="ion-page">
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button primary @click="toRoute('/')">
+            <ion-icon slot="icon-only" color="primary" name="arrow-back"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button primary>
+            <ion-icon slot="icon-only" color="primary" name="information-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
         <ion-title>Sign In</ion-title>
       </ion-toolbar>
     </ion-header>
@@ -18,7 +28,6 @@
 </template>
 
 <script>
-
 import GoogleSignInButton from '@/components/GoogleSignInButton'
 
 export default {
@@ -26,6 +35,11 @@ export default {
   components: {
     GoogleSignInButton,
   },
+  methods: {
+    toRoute(route) {
+      this.$router.push(route);
+    },
+  }
 }
 </script>
 

@@ -19,7 +19,7 @@ export default {
   name: "Index",
   beforeCreate: function () {
     if (this.$session.exists()) {
-      this.$router.push("/home");
+      this.$router.push('/home')
     }
   },
   methods: {

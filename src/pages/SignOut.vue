@@ -4,19 +4,19 @@
 <script>
 export default {
   name: "SignOut",
-  beforeCreate: function () {
+  created () {
     if (this.$session.exists()) {
       if(this.$session.has('session_id') == true){
         this.$session.destroy()
-        this.$router.push("/");
+        this.$router.push('/');
         return
       } else {
         console.log("Error Signing out")
-        this.$router.push("/error");
+        this.$router.push('/error');
       }
     } else {
       this.$session.destroy()
-      this.$router.push("/");
+      this.$router.push('/');
     }
   },
 }

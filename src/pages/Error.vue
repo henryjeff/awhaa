@@ -10,6 +10,7 @@
         <ion-title>Oh No!</ion-title>
         <p>Something has gone wrong, probably on us<br> Sorry about that...</p>
         <ion-button shape="round" fill="outline" @click="toSafty">Back To Safty</ion-button>
+        <p class="error">{{this.$route.params.code}}</p>
       </div>
     </ion-content>
   </div>
@@ -21,7 +22,7 @@ export default {
   methods: {
     toSafty(){
       this.$session.destroy()
-      this.$router.push("/")
+      this.$router.push('/')
     }
   }
 }
@@ -31,5 +32,9 @@ export default {
 <style>
 .vcenter{
   margin-top: 40%;
+}
+.error {
+  font-size: 12px;
+  color: #C6C6C6;
 }
 </style>

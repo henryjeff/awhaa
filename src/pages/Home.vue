@@ -3,12 +3,12 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button primary @click="toSignOut">
+          <ion-button primary @click="toRoute('/signout')">
             <ion-icon slot="icon-only" color="primary" name="arrow-back"></ion-icon>
           </ion-button>
         </ion-buttons>
         <ion-buttons slot="primary">
-          <ion-button primary @click="toUserSettings">
+          <ion-button primary @click="toUserSettings()">
             <ion-icon slot="icon-only" color="primary" name="contact"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -21,8 +21,8 @@
           <ion-icon name="restaurant"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
-          <ion-fab-button><ion-icon name="add" @click="toAddMeal"></ion-icon></ion-fab-button>
-          <ion-fab-button><ion-icon name="create" @click="toCreateMeal"></ion-icon></ion-fab-button>
+          <ion-fab-button><ion-icon name="add" @click="toRoute('/addpreppedmeal')"></ion-icon></ion-fab-button>
+          <ion-fab-button><ion-icon name="create" @click="toRoute('/createmeal')"></ion-icon></ion-fab-button>
         </ion-fab-list>
       </ion-fab>
 
@@ -41,46 +41,22 @@
 <script>
 import NextMeal from '@/components/NextMeal'
 import SummerCountdown from '@/components/SummerCountdown'
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   name: "Home",
   data () {
     return {
       loading: false,
-      first_name: this.$session.get("user").name.first
+      first_name: ""
     }
   },
   methods: {
     toUserSettings() {
-      this.$router.push("/user/" + this.$session.get("user").username);
+      this.$router.push(`/user/${this.$store.state.user.username}`);
     },
-    toCreateMeal() {
-      this.$router.push('/createmeal')
-    },
-    toAddMeal() {
-      this.$router.push('/addpreppedmeal')
-    },
-    toSignOut () {
-      return this.$ionic.loadingController
-        .create({
-          message: 'Loading',
-          duration: 1000,
-        })
-        .then(l => {
-          this.checkIfSignedOut(l)
-          this.$router.push('/signout')
-          return l.present()
-        })
-    },
-    checkIfSignedOut(loader) {
-      if(!this.$session.exists()){
-        setTimeout(function() {
-          this.checkIfSignedOut(loader)
-        }, 50)
-      } else {
-        loader.dismiss()
-      }
+    toRoute(route) {
+      this.$router.push(route);
     },
   },
   components: {
@@ -89,7 +65,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

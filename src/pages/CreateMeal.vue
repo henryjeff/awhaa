@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button primary @click="cancelCreation">
+          <ion-button primary @click="toRoute('/home')">
             <ion-icon slot="icon-only" color="primary" name="arrow-back"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -21,7 +21,6 @@
           <ion-card-title style="text-align:left!important;">Create a Meal</ion-card-title>
           <ion-card-subtitle style="text-align:left!important;">Meal Template maker</ion-card-subtitle>
         </ion-card-header>
-        <!-- <hr> -->
         <ion-card-content>
           <ion-list>
             <ion-card-subtitle style="text-align:left!important;">Basic info</ion-card-subtitle>
@@ -68,8 +67,7 @@
           </ion-list>
           <ion-buttons class="meal-buttons">
               <ion-button class="create-meal" shape="round" fill="outline" color="primary" @click="createMeal">Create</ion-button>
-              <ion-button class="cancel-meal" shape="round" fill="outline" color="medium" @click="cancelCreation">Cancel</ion-button>
-            <!-- </ion-item> -->
+              <ion-button class="cancel-meal" shape="round" fill="outline" color="medium" @click="toRoute('/home')">Cancel</ion-button>
           </ion-buttons>
        </ion-card-content>
      </ion-card>
@@ -79,6 +77,7 @@
 
 <script>
 import axios from "axios";
+import { EventBus } from '../events';
 
 export default {
   name: "CreateMeal",
@@ -94,23 +93,11 @@ export default {
     }
   },
   methods: {
+    toRoute(route) {
+      this.$router.push(route);
+    },
     addStep() {
       this.prep_steps.push({value: ""})
-    },
-    cancelCreation() {
-      this.$router.push("/home")
-    },
-    startLoading () {
-      this.loading = true
-      return this.$ionic.loadingController
-        .create({
-          message: 'Loading',
-          duration: 1000,
-        })
-        .then(l => {
-          this.checkLoading(l)
-          return l.present()
-        })
     },
     async successToast (message) {
       const toast = await this.$ionic.toastController.create({
@@ -127,16 +114,6 @@ export default {
         duration: 3000
       })
       await toast.present();
-    },
-    checkLoading(loader) {
-      let self = this
-      if(this.loading == true){
-        setTimeout(function() {
-          self.checkLoading(loader)
-        }, 50)
-      } else {
-        loader.dismiss()
-      }
     },
     createMeal() {
       var prep_steps = []
@@ -179,24 +156,16 @@ export default {
         meal_times: this.meal_times,
         shelf_life: this.shelf_life
       }
+      
+      meal.user_id = this.$store.state.user._id
 
-      this.startLoading()
+      EventBus.$emit('start-loading', {'self':this,'redirect':'/home'})
 
-      let self = this
-
-      meal.user_id = this.$session.get('user')._id
-      axios.post("/api/meals/", meal)
-          .then((response) => {
-              this.loading = false
-              this.successToast("Successfully created meal")
-              this.$router.push('/home')
-          })
-          .catch((errors) => {
-              this.loading = false
-              console.log("Database Error: Creating Meal")
-              console.log(errors)
-              this.$router.push('/error')
-          })
+      this.$store.dispatch('postMeal', {'meal' : meal})
+        .then((response) => {
+          this.loading = false
+          this.successToast("Successfully created meal")
+        })
     }
   }
 }
