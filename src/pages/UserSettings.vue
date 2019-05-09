@@ -9,7 +9,7 @@
         </ion-buttons>
         <ion-title>User Settings</ion-title>
         <ion-buttons slot="primary">
-          <ion-button primary @click="toBack">
+          <ion-button primary @click="toRoute('/home')">
             <ion-icon slot="icon-only" color="primary" name="create"></ion-icon>
           </ion-button>
         </ion-buttons>

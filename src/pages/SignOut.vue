@@ -15,6 +15,7 @@ export default {
     EventBus.$emit('start-loading', {'self':this,'redirect':'/'})
 
     if (this.$session.exists()) {
+      console.log("destorying session")
       this.$session.destroy()
       this.loading = false
       this.$router.push('/')
