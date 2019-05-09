@@ -32,6 +32,6 @@ console.log(`Connecition established in ${d_time} ms`)
 
 app.use('/api', routes.users)
 app.use('/api', routes.meals)
-
+app.use('/api', routes.preppedmeals)
 
 module.exports = app;

@@ -1,8 +1,9 @@
-// var locationsRouter = require('./routes/locations');
 var usersRouter = require('./routes/users');
 var mealsRouter = require('./routes/meals');
-// var eventsRouter = require('./routes/events');
+var preppedmealsRouter = require('./routes/preppedmeals');
+
 module.exports = {
   users: usersRouter,
-  meals: mealsRouter
+  meals: mealsRouter,
+  preppedmeals: preppedmealsRouter
 };
