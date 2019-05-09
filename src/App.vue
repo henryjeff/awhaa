@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <ion-app>
+    <ion-app  v-if="!loading">
       <ion-vue-router />
     </ion-app>
   </div>
@@ -12,60 +12,98 @@ import { EventBus } from './events';
 
 export default {
   name: 'App',
-  created() {
-    this.checkSession();
+  data() {
+    return {
+      loading: true
+    }
   },
   mounted() {
-    let self = this
+    setTimeout(async () => {
+      this.startLoading({'self':self, 'dont_load':true});
+    }, 0);
+    this.checkSession();
     EventBus.$on('start-loading', data => {
-      self.startLoading(data)
+      this.startLoading(data)
+    })
+    EventBus.$on('success-toast', data => {
+      this.successToast(data)
+    })
+    EventBus.$on('danger-toast', data => {
+      this.dangerToast(data)
     })
   },
   methods: {
-    checkSession() {
+    async checkSession() {
       console.log("checking session")
       if(!this.$session.exists()){
         console.log("session doesn't exist")
+        this.loading = false
         this.$router.push("/");
         return
       } else {
         if(this.$session.get('session_id') == undefined){
           console.log("session is bad")
+          this.loading = false
           this.$session.destroy()
           this.$router.push("/")
         } else if (this.$session.get('session_id') != undefined && this.$store.state.user == undefined) {
+          let self = this
           this.$store.dispatch("fetchUser", { 'user' : {gid : this.$session.get('session_id')}, 'signin' : true})
             .then((response) => {
-              console.log(response.data)
+              this.loading = false
               console.log("refreshed user")
-              this.$router.push("/home")
             })
         } else {
+          this.loading = false
           console.log("all else is good")
-          this.$router.push("/home")
         }
       }
     },
     async startLoading(payload) {
-      payload.self.loading = true
+      if(!payload.dont_load) payload.self.loading = true
       return await this.$ionic.loadingController.create({
         message: "Loading",
-        duration: 5000,
+        duration: 100000,
       }).then(a => {
         a.present().then(() => {
-          this.checkLoading(payload.self, a, payload.redirect)
+          this.checkLoading(payload.self, a, payload.redirect, 0)
         });
       });
     },
-    checkLoading(self, a, redirect) {
+    checkLoading(self, a, redirect, times) {
+      let me = this
+      if(times * 10 >= 100000){
+        a.dismiss()
+        this.$router.push('/error/ERR_TIMEOUT')
+        return
+      }
       if (self.loading) {
         setTimeout(function() {
-          this.checkLoading(self, a, redirect)
-        }, 100)
+          times += 1
+          me.checkLoading(self, a, redirect, times)
+        }, 10)
       } else {
         a.dismiss()
-        router.push(redirect)
+        if(redirect != undefined){
+          this.$router.push(redirect)
+        }
       }
+    },
+    async successToast (payload) {
+      const toast = await this.$ionic.toastController.create({
+        message: payload.message,
+        color: "primary",
+        duration: 3000
+      })
+      await toast.present();
+    },
+    async dangerToast (payload) {
+      const toast = await this.$ionic.toastController.create({
+        message: payload.message,
+        color: "danger",
+        duration: 3000
+      })
+      await toast.present();
     },
   // methods: {
   //   timeout: function() {
