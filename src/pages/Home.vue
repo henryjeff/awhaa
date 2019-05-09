@@ -8,7 +8,7 @@
           </ion-button>
         </ion-buttons>
         <ion-buttons slot="primary">
-          <ion-button primary @click="toUserSettings()">
+          <ion-button primary @click="openUserPopover()">
             <ion-icon slot="icon-only" color="primary" name="contact"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -21,8 +21,8 @@
           <ion-icon name="restaurant"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
-          <ion-fab-button><ion-icon name="add" @click="toRoute('/addpreppedmeal')"></ion-icon></ion-fab-button>
-          <ion-fab-button><ion-icon name="create" @click="toRoute('/createmeal')"></ion-icon></ion-fab-button>
+          <ion-fab-button><ion-icon name="add" @click="toRoute('/meals/search')"></ion-icon></ion-fab-button>
+          <ion-fab-button><ion-icon name="create" @click="toRoute('/meals/create')"></ion-icon></ion-fab-button>
         </ion-fab-list>
       </ion-fab>
 
@@ -39,17 +39,40 @@
 </template>
 
 <script>
+import { EventBus } from '../events';
+
 import NextMeal from '@/components/NextMeal'
+import UserPopover from '@/components/UserPopover'
 import SummerCountdown from '@/components/SummerCountdown'
 
 export default {
   name: "Home",
   data () {
     return {
-      first_name: ""
+      loading: true,
+      first_name: "",
+      popover: undefined
     }
   },
+  created() {
+    EventBus.$on('close-popover', route => {
+      this.popover.dismiss()
+      this.$router.push(route)
+    })
+  },
   methods: {
+    openUserPopover() {
+      this.$ionic.popoverController.create({
+          component: UserPopover,
+          translucent: true,
+          event
+      })
+      .then(p => {
+        this.popover = p
+        this.popover.present()
+        // p.present()
+      })
+    },
     toUserSettings() {
       this.$router.push(`/user/${this.$store.state.user.username}`)
     },
@@ -57,9 +80,13 @@ export default {
       this.$router.push(route)
     },
   },
+  mounted() {
+    this.first_name = this.$store.state.user.name.first
+  },
   components: {
     NextMeal,
-    SummerCountdown
+    SummerCountdown,
+    UserPopover
   }
 }
 </script>
