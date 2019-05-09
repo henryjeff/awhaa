@@ -15,7 +15,7 @@ global.router = router
 Vue.use(Ionic);
 Vue.use(VueSpinners)
 Vue.use(GSignInButton)
-Vue.use(VueSession)
+Vue.use(VueSession, {'persist':true})
 
 Vue.config.ignoredElements = [
   'ion-app',
@@ -44,7 +44,10 @@ Vue.config.ignoredElements = [
   'ion-fab-list',
   'ion-select',
   'ion-select-option',
-  'ion-searchbar'
+  'ion-searchbar',
+  'ion-grid',
+  'ion-row',
+  'ion-col'
 ]
 
 Vue.config.productionTip = false
