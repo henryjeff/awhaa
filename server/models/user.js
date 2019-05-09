@@ -9,16 +9,6 @@ var User = new Schema({
     first: String,
     last: String
   },
-  // meals: {
-  //   prepped: [{
-  //       type: Schema.Types.ObjectId,
-  //       ref: 'PreppedMeal'
-  //   }],
-  //   eaten: [{
-  //       type: Schema.Types.ObjectId,
-  //       ref: 'PreppedMeal'
-  //   }],
-  // }
 });
 
 module.exports = mongoose.model('User', User);

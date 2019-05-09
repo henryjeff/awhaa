@@ -3,16 +3,25 @@ var Schema = mongoose.Schema;
 
 var PreppedMeal = new Schema({
   user: {
-    type: ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User'
   },
   meal: {
-    type: ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Meal'
   },
   prep: {
-    date: Date,
+    created: {
+      type: Date,
+      default: Date.now
+    },
     by: Date,
+  },
+  eaten: {
+    type: Boolean,
+    default: false
   },
   notes: String
 });
+
+module.exports = mongoose.model('PreppedMeal', PreppedMeal);
