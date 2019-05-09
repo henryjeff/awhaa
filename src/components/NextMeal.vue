@@ -1,5 +1,5 @@
 <template>
-  <ion-card>
+  <ion-card href="#">
     <ion-card-header>
       <ion-card-subtitle>Next Meal - 500 calories</ion-card-subtitle>
       <ion-card-title>Chicken Salad</ion-card-title>
