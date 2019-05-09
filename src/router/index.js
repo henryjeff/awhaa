@@ -6,15 +6,12 @@ import SignOut from '@/pages/SignOut'
 import Home from '@/pages/home'
 import Error from '@/pages/error'
 import CreateMeal from '@/pages/CreateMeal'
-import AddPreppedMeal from '@/pages/AddPreppedMeal'
+import MealsSearch from '@/pages/MealsSearch'
 import UserSettings from '@/pages/UserSettings'
-// import Search from '@/components/Search'
-// import Dash from '@/components/Dash'
-// import Event from '@/components/EventDisplay'
-// import Map from '@/components/Map'
-// import EventCreate from '@/components/EventCreate'
-import { IonicVueRouter } from '@ionic/vue';
+import MealOverview from '@/pages/MealOverview'
+import PreppedMeals from '@/pages/PreppedMeals'
 
+import { IonicVueRouter } from '@ionic/vue';
 Vue.use(IonicVueRouter);
 
 export default new IonicVueRouter({
@@ -42,14 +39,14 @@ export default new IonicVueRouter({
       component: Home
     },
     {
-      path: '/createmeal',
+      path: '/meals/create',
       name: 'Create Meal',
       component: CreateMeal
     },
     {
-      path: '/addpreppedmeal',
-      name: 'Add Prepared Meal',
-      component: AddPreppedMeal
+      path: '/meals/search',
+      name: 'Seach Meals',
+      component: MealsSearch
     },
     {
       path: '/user/:username',
@@ -57,9 +54,19 @@ export default new IonicVueRouter({
       component: UserSettings
     },
     {
+      path: '/meals/overview/:id',
+      name: 'Meal',
+      component: MealOverview
+    },
+    {
       path: '/error/:code',
       name: 'Error',
       component: Error
     },
+    {
+      path: '/mymeals/',
+      name: 'My Prepared Meals',
+      component: PreppedMeals
+    }
   ]
 })
