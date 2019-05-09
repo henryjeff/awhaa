@@ -18,11 +18,16 @@
   padding-bottom: 10px;
 }
 
-.sc-ion-card-md-h {
+.sc-ion-card-md-h,
+.searchbar-input.sc-ion-searchbar-md{
   box-shadow:none;
   /* -webkit-box-shadow: 0 3px 3px -2px rgba(0,0,0,.2), 0 3px 3px 0 rgba(0,0,0,.14), 0 3px 3px 0 rgba(0,0,0,.12); */
-  -webkit-box-shadow: 0 3px 3px -2px rgba(0,0,0,.2), 0 0.5px 0.5px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  -webkit-box-shadow: 0 3px 6px -2px rgba(0,0,0,.2), 0 0.5px 0.5px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 }
+/* .searchbar-input.sc-ion-searchbar-md {
+  -webkit-box-shadow: none;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12)!important;
+} */
 
 .header-md {
   -webkit-box-shadow: 0 3px 3px -2px rgba(0,0,0,.2)!important;
@@ -31,6 +36,19 @@
   background-image: none!important;
 }
 
+.fade-in-item {
+  -webkit-animation: fadein 400ms!important; /* Safari, Chrome and Opera > 12.1 */
+   animation: fadein 400ms!important;
+}
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
 
 /* .content{
   background-color: #F1F1F1;
