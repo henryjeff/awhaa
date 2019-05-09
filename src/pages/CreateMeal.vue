@@ -17,13 +17,13 @@
     </ion-header>
     <ion-content class="content" padding>
       <ion-card>
-        <ion-card-header>
-          <ion-card-title style="text-align:left!important;">Create a Meal</ion-card-title>
-          <ion-card-subtitle style="text-align:left!important;">Meal Template maker</ion-card-subtitle>
+        <ion-card-header class="border-bottom" style="margin-bottom: 8px;">
+          <ion-card-title>Create a Meal</ion-card-title>
+          <ion-card-subtitle>Meal Template maker</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
           <ion-list>
-            <ion-card-subtitle style="text-align:left!important;">Basic info</ion-card-subtitle>
+            <ion-card-subtitle>Basic info</ion-card-subtitle>
             <ion-item>
               <ion-label class="input-label">Name : </ion-label>
               <ion-input placeholder="Ex: Chicken Salad" :value="name" @input="name = $event.target.value"></ion-input>
@@ -46,7 +46,7 @@
           </ion-list>
           <br>
           <ion-list>
-            <ion-card-subtitle style="text-align:left!important;">Preperation</ion-card-subtitle>
+            <ion-card-subtitle>Preperation</ion-card-subtitle>
             <ion-item>
               <ion-label class="input-label">Shelf Life : </ion-label>
               <ion-input placeholder="Ex: 5 days" type="number" :value="shelf_life" @input="shelf_life = $event.target.value"></ion-input>
@@ -98,22 +98,6 @@ export default {
     addStep() {
       this.prep_steps.push({value: ""})
     },
-    async successToast (message) {
-      const toast = await this.$ionic.toastController.create({
-        message: message,
-        color: "primary",
-        duration: 3000
-      })
-      await toast.present();
-    },
-    async failToast (message) {
-      const toast = await this.$ionic.toastController.create({
-        message: message,
-        color: "danger",
-        duration: 3000
-      })
-      await toast.present();
-    },
     createMeal() {
       var prep_steps = []
 
@@ -140,7 +124,7 @@ export default {
       }
 
       if(status != ""){
-        this.failToast("Failed to create meal for the following reasons:\n" + status)
+        EventBus.$emit('danger-toast', {'message':'Failed to create meal for the following reasons:\n' + status})
         return
       }
 
@@ -163,7 +147,7 @@ export default {
       this.$store.dispatch('postMeal', {'meal' : meal})
         .then((response) => {
           this.loading = false
-          this.successToast("Successfully created meal")
+          EventBus.$emit('success-toast', {'message':'Successfully created meal'})
         })
     }
   }
@@ -177,12 +161,13 @@ export default {
 .step-add{
   border-radius: 20px;
 }
-
 .meal-buttons{
   margin-top: 10px;
   margin-bottom: 10px;
 }
-
+.border-bottom {
+  border-bottom: 1px solid rgb(221, 221, 221);
+}
 .cancel-meal{
   padding-left: 5px;
   width: 100%;
