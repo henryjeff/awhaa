@@ -3,13 +3,13 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button primary @click="toRoute('/signout')">
-            <ion-icon slot="icon-only" color="primary" name="arrow-back"></ion-icon>
+          <ion-button primary @click="toRoute('/mymeals/')">
+            <ion-icon slot="icon-only" color="primary" name="logo-buffer"></ion-icon>
           </ion-button>
         </ion-buttons>
         <ion-buttons slot="primary">
           <ion-button primary @click="openUserPopover()">
-            <ion-icon slot="icon-only" color="primary" name="contact"></ion-icon>
+            <ion-icon slot="icon-only" color="primary" name="person"></ion-icon>
           </ion-button>
         </ion-buttons>
         <ion-title>Dashboard</ion-title>
@@ -56,7 +56,7 @@ export default {
   },
   created() {
     EventBus.$on('close-popover', route => {
-      this.popover.dismiss()
+      if(this.popover != undefined) this.popover.dismiss()
       this.$router.push(route)
     })
   },
@@ -70,7 +70,6 @@ export default {
       .then(p => {
         this.popover = p
         this.popover.present()
-        // p.present()
       })
     },
     toUserSettings() {
