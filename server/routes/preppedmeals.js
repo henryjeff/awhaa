@@ -4,31 +4,64 @@ var User = require('../models/user.js')
 var Meal = require('../models/meal.js');
 var PreppedMeal = require('../models/preppedmeal.js');
 
+async function getPreppedMealData(preppedmeal) {
+  return new Promise((resolve, reject) => {
+    User.findById(preppedmeal.user, function(err, user) {
+      if (err || !user) {
+        reject({ message: 'Error finding user' })
+      }
+      Meal.findById(preppedmeal.meal, function(err, meal) {
+        if (err || !meal) {
+          reject({ message: 'Error finding meal' })
+        }
+        preppedmeal.user = user
+        preppedmeal.meal = meal
+        resolve(preppedmeal)
+      })
+    })
+  })
+}
+
 // Find meals with an id
 router.get('/mymeals/id/:id', function(req, res, next){
-  id = req.params.id
-  PreppedMeal.findById(id, function(err, preppedmeal) {
+  PreppedMeal.findById(req.params.id, function(err, preppedmeal) {
     if (err || !preppedmeal) {
       res.send({ message: 'Error finding prepped meal' })
       return next()
     }
-    console.log("cokc")
-    User.findById(preppedmeal.user, function(err, user) {
-      if (err || !user) {
-        res.send({ message: 'Error finding user' })
-        return next()
-      }
-      Meal.findById(preppedmeal.meal, function(err, meal) {
-        if (err || !meal) {
-          res.send({ message: 'Error finding meal' })
-          return next()
-        }
-        preppedmeal.user = user
-        preppedmeal.meal = meal
-        res.send(preppedmeal)
-        return next()
+    getPreppedMealData(preppedmeal)
+      .then(data => {
+        res.send(data)
+      })
+      .catch(err => {
+        res.send(err)
+      })
+  })
+})
+
+router.get('/mymeals/inventory/:id', function(req, res, next){
+  PreppedMeal.find({'user_id':req.params.user_id}, function(err, preppedmeals) {
+    var inventory = []
+
+    let requests = preppedmeals.map((preppedmeal) => {
+      return new Promise((resolve) => {
+        getPreppedMealData(preppedmeal)
+          .then(data => {
+            inventory.push(data)
+            resolve()
+          })
+          .catch(err => {
+            res.send(err)
+          })
       })
     })
+    Promise.all(requests)
+      .then(() => {
+        res.send(inventory)
+      })
+      .catch(() => {
+        res.send("Error finding all preppared meals")
+      })
   })
 })
 
