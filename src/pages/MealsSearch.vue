@@ -10,7 +10,7 @@
         <ion-title>Add Prepared Meals</ion-title>
         <ion-buttons slot="primary">
           <ion-button primary @click="toRoute('/home')">
-            <ion-icon slot="icon-only" color="primary" name="information-circle-outline"></ion-icon>
+            <ion-icon slot="icon-only" color="primary" name="help-circle-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
