@@ -13,7 +13,7 @@
       <ion-label>
         My Preppared Meals
       </ion-label>
-      <ion-icon name="cube" slot="end"></ion-icon>
+      <ion-icon name="logo-buffer" slot="end"></ion-icon>
     </ion-item>
     <ion-item href="#">
       <ion-label>
@@ -21,7 +21,7 @@
       </ion-label>
       <ion-icon name="settings" slot="end"></ion-icon>
     </ion-item>
-    <ion-item href="#">
+    <ion-item href="#" @click="toRoute('/signout')">
       <ion-label>
         Sign out
       </ion-label>
