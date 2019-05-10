@@ -10,7 +10,7 @@
         <ion-title>Create a meal</ion-title>
         <ion-buttons slot="end">
           <ion-button primary>
-            <ion-icon slot="icon-only" color="primary" name="information-circle-outline"></ion-icon>
+            <ion-icon slot="icon-only" color="primary" name="help-circle-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
