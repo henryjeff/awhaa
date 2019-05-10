@@ -1,0 +1,120 @@
+<template>
+  <div class="ion-page" v-if="loading === false">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button primary @click="toRoute('/mymeals/')">
+            <ion-icon slot="icon-only" color="primary" name="arrow-back"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title>{{preppedmeal.meal.name}}</ion-title>
+        <ion-buttons slot="primary">
+          <ion-button primary @click="toRoute('/mymeals/')">
+            <ion-icon slot="icon-only" color="primary" name="help-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="content" padding>
+      <ion-card style="padding:none;">
+        <ion-card-header class="border-bottom">
+          <ion-card-title>{{preppedmeal.meal.name}}</ion-card-title>
+          <ion-card-subtitle color="primary">{{preppedmeal.meal.calories}} calories</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content style="margin-top: 16px;">
+          <MealExperationTimer class="border-bottom" style="padding-bottom:10px; margin-bottom: 5px;" :preppedmeal='preppedmeal'/>
+          <MealInformation :meal='preppedmeal.meal'/>
+          <MealTimes :meal='preppedmeal.meal'/>
+          <MealRecipe :meal='preppedmeal.meal' :creator='creator'/>
+          <ion-item class="no-item-padding">
+            <span style="color: #737373;">{{this.notes}}</span>
+          </ion-item>
+          <br>
+          <ion-card-subtitle style="text-align:left!important;">Meal created by {{creator}}</ion-card-subtitle>
+        </ion-card-content>
+        <ion-card-content class="bottom-buttons">
+          <ion-buttons>
+            <ion-button class="eat-meal" shape="round" fill="outline" color="primary" @click="toRoute('/mymeals/')">Eat Meal</ion-button>
+            <ion-button class="delete-meal" shape="round" fill="outline" color="medium" @click="toRoute('/mymeals/')">Delete Meal</ion-button>
+          </ion-buttons>
+        </ion-card-content>
+      </ion-card>
+    </ion-content>
+  </div>
+</template>
+
+<script>
+import { EventBus } from '../events';
+
+import MealExperationTimer from '@/components/MealOverview/MealExperationTimer'
+import MealInformation from '@/components/MealOverview/MealInformation'
+import MealRecipe from '@/components/MealOverview/MealRecipe'
+import MealTimes from '@/components/MealOverview/MealTimes'
+
+export default {
+  name: "PreppedMealOverview",
+  data() {
+    return {
+      loading: true,
+      preppedmeal: undefined,
+      creator: undefined,
+      notes: ""
+    }
+  },
+  components: {
+    MealExperationTimer,
+    MealInformation,
+    MealRecipe,
+    MealTimes,
+  },
+  mounted () {
+    var id = this.$route.params.id
+    // EventBus.$emit('start-loading', {'self':this})
+    this.$store.dispatch("fetchPreppedMeal", {"preppedmeal" : {"id" : id}})
+      .then((response) => {
+        this.preppedmeal = response.data
+        this.creator = this.preppedmeal.user.name.first + " " + this.preppedmeal.user.name.last
+        this.notes = "Notes: " + this.preppedmeal.notes
+        if(this.preppedmeal.notes == ""){
+          this.notes = "No notes for meal"
+        }
+        this.loading = false
+      })
+  },
+  methods: {
+    toRoute(route){
+      this.$router.push(route)
+    },
+    // removeMeal(data){
+    //   EventBus.$emit('start-loading', {'self':this, 'redirect':'/meals/search'})
+    //   var preppedmeal = {
+    //     "preppedmeal": {
+    //       "user_id": this.$store.state.user._id,
+    //       "meal_id": this.meal._id,
+    //       "shelf_life": this.meal.shelf_life,
+    //       "notes": this.notes,
+    //       "num_meals": this.num_meals
+    //     }
+    //   }
+    //   this.$store.dispatch("postPreppedMeal", preppedmeal)
+    //     .then((response) => {
+    //       EventBus.$emit('success-toast', {'message':'Successfully added prepped meal(s) to your inventory'})
+    //       this.loading = false
+    //     })
+    // }
+  }
+}
+</script>
+
+<style>
+.delete-meal{
+  padding-left: 5px;
+  width: 100%;
+  height: 30px;
+}
+.eat-meal{
+  padding-right: 5px;
+  width: 100%;
+  height: 30px;
+}
+</style>
