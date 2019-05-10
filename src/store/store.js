@@ -106,5 +106,29 @@ export const store = new Vuex.Store({
           })
       })
     },
+    async fetchPreppedMeal({commit}, payload){
+      return new Promise((resolve, reject) => {
+        axios.get(`/api/mymeals/id/${payload.preppedmeal.id}`)
+          .then((response) => {
+            resolve(response)
+          })
+          .catch((errors) => {
+            router.push('/error/ERR_DB_FETCH_PREPPED_MEAL')
+            reject(errors)
+          })
+      })
+    },
+    async fetchPreppedMeals({commit}, payload){
+      return new Promise((resolve, reject) => {
+        axios.get(`/api/mymeals/inventory/${payload.user.id}`)
+          .then((response) => {
+            resolve(response)
+          })
+          .catch((errors) => {
+            router.push('/error/ERR_DB_FETCH_INVENTORY')
+            reject(errors)
+          })
+      })
+    },
   }
 })

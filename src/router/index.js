@@ -10,6 +10,7 @@ import MealsSearch from '@/pages/MealsSearch'
 import UserSettings from '@/pages/UserSettings'
 import MealOverview from '@/pages/MealOverview'
 import PreppedMeals from '@/pages/PreppedMeals'
+import PreppedMealOverview from '@/pages/PreppedMealOverview'
 
 import { IonicVueRouter } from '@ionic/vue';
 Vue.use(IonicVueRouter);
@@ -67,6 +68,11 @@ export default new IonicVueRouter({
       path: '/mymeals/',
       name: 'My Prepared Meals',
       component: PreppedMeals
+    },
+    {
+      path: '/mymeals/overview/:id',
+      name: 'Prepared Meal',
+      component: PreppedMealOverview
     }
   ]
 })
