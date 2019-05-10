@@ -1,39 +1,40 @@
 <template>
-  <ion-card>
+  <ion-card class="fade-in-item">
     <div style="padding: 7px;">
       <ion-grid>
         <ion-row>
           <ion-col>
-            <ion-card-subtitle style="text-align:left!important">{{meal.calories}} calories</ion-card-subtitle>
-            <ion-card-title style="text-align:left!important">{{meal.name}}</ion-card-title>
+            <ion-card-subtitle style="text-align:left!important">{{preppedmeal.meal.calories}} calories</ion-card-subtitle>
+            <ion-card-title style="text-align:left!important">{{preppedmeal.meal.name}}</ion-card-title>
           </ion-col>
           <ion-col align-self-end style="text-align:right!important">
-            <ion-chip color="primary" outline="true" @click="routeToMeal()">
-              <ion-icon name="restaurant"color="primary"></ion-icon>
-              <ion-label>Prepare</ion-label>
+            <ion-chip class="no-end-margin" color="primary" outline="true" @click="routeToMeal()">
+              <ion-icon name="information-circle-outline"color="primary"></ion-icon>
+              <ion-label>More Info</ion-label>
             </ion-chip>
           </ion-col>
         </ion-row>
+        <MealExperationTimer :preppedmeal='preppedmeal'/>
       </ion-grid>
     </div>
   </ion-card>
 </template>
 
 <script>
+import MealExperationTimer from '@/components/MealOverview/MealExperationTimer'
+
 export default {
   name: "PreppedMealPreview",
-  data () {
-    return {
-      formatted_times: ""
-    }
-  },
   props: {
-    meal: Object
+    preppedmeal: Object
+  },
+  components: {
+    MealExperationTimer
   },
   methods: {
     routeToMeal(){
-      this.$router.push(`/meals/overview/${this.meal._id}`)
-    }
+      this.$router.push(`/mymeals/overview/${this.preppedmeal._id}`)
+    },
   }
 }
 </script>

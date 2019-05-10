@@ -8,7 +8,7 @@
             <ion-card-title style="text-align:left!important">{{meal.name}}</ion-card-title>
           </ion-col>
           <ion-col align-self-end style="text-align:right!important">
-            <ion-chip color="primary" outline="true" @click="routeToMeal()">
+            <ion-chip class="no-end-margin" color="primary" outline="true" @click="routeToMeal()">
               <ion-icon name="restaurant"color="primary"></ion-icon>
               <ion-label>Prepare</ion-label>
             </ion-chip>
