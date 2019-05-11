@@ -14,7 +14,8 @@
             </ion-chip>
           </ion-col>
         </ion-row>
-        <MealExperationTimer :preppedmeal='preppedmeal'/>
+        <MealExperationTimer :preppedmeal='preppedmeal' v-if='!preppedmeal.eaten.status'/>
+        <MealEatenStatus :preppedmeal='preppedmeal' v-else/>
       </ion-grid>
     </div>
   </ion-card>
@@ -22,6 +23,7 @@
 
 <script>
 import MealExperationTimer from '@/components/MealOverview/MealExperationTimer'
+import MealEatenStatus from '@/components/MealOverview/MealEatenStatus'
 
 export default {
   name: "PreppedMealPreview",
@@ -29,7 +31,8 @@ export default {
     preppedmeal: Object
   },
   components: {
-    MealExperationTimer
+    MealExperationTimer,
+    MealEatenStatus
   },
   methods: {
     routeToMeal(){
