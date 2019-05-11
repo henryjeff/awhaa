@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "MealInformation",
+  name: "MealExperationTimer",
   data () {
     return {
       progress_val: 0,
@@ -51,11 +51,16 @@ export default {
     var minutes = this.mins_left % 60
     var days = (hours - (hours % 24)) / 24
     hours = hours % 24
-    this.time_left = days + " days, " + hours + " hours, " + minutes + " minutes"
-    // var hours = (this.mins_left % 60)
-    // console.log(hours)
-    // var hours = this.mins_left / 24)
 
+    var day_s = "s"
+    var hour_s = "s"
+    var minute_s = "s"
+
+    if(days == 1) day_s = ""
+    if(hours == 1) hour_s = ""
+    if(minutes == 1) minute_s = ""
+
+    this.time_left = `${days} day${day_s}, ${hours} hour${hour_s}, ${minutes} minute${minute_s}`
   },
   methods: {
     formatDate(date){
