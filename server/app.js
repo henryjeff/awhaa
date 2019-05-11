@@ -23,9 +23,9 @@ var mongoose = require('mongoose');
 console.log("Establishing Connection...")
 
 var s_time = process.hrtime()[1];
-mongoose.connect(mongo_uri, {useNewUrlParser: true});
+mongoose.connect(mongo_uri, {useNewUrlParser: true, useFindAndModify: false});
 
-var d_time = (process.hrtime()[1] - s_time) / 1000000;
+var d_time = (process.hrtime()[1] - s_time) / 100000;
 
 console.log("Connected to cluster")
 console.log(`Connecition established in ${d_time} ms`)
