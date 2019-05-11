@@ -1,91 +1,65 @@
 <template>
-  <ion-card href="#">
-    <ion-card-header>
-      <ion-card-subtitle>Next Meal - 500 calories</ion-card-subtitle>
-      <ion-card-title>Chicken Salad</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      Located In Fridge, Prep Info below:
-      Microwave for 50 seconds
-      <!-- <ion-spinner name="crescent"></ion-spinner> -->
-      <!-- <ion-item>
-        <ion-icon name="pin" slot="start"></ion-icon>
-        <ion-label>ion-item in a card, icon left, button right</ion-label>
-        <ion-button round slot="end">View</ion-button>
-      </ion-item> -->
-      <!-- <ion-item-divider>
-        <ion-label>
-          Eat by 1:01 pm
-        </ion-label>
-        <ion-label>
-          Time left 53 minutes
-        </ion-label>
-      </ion-item-divider> -->
-    </ion-card-content>
-    <div class="meal-timer">
-      <ion-label class="timer-label" primary>
-        53 minutes left
-      </ion-label>
-      <div class="timer-bar">
-        <ion-progress-bar v-bind:value="value"></ion-progress-bar>
-      </div>
-      <!-- <ion-item style="padding-right: 8px;"> -->
-      <!-- </ion-item> -->
+  <div v-if="loading === false">
+    <div v-if="preppedmeal === undefined">
+      <ion-card>
+        <ion-card-header >
+          <ion-card-title>You don't have any prepared meals</ion-card-title>
+          <ion-card-subtitle>Add some meals to your inventory</ion-card-subtitle>
+          <hr>
+          <ion-button shape="round" fill="outline" primary @click="toRoute('/meals/search')">
+            Add Meals
+          </ion-button>
+        </ion-card-header>
+      </ion-card>
     </div>
-    <!-- <ion-item> -->
-    <!-- </ion-item> -->
-    <!-- <ion-toolbar>
-      <ion-button full @click="eatMeal"> Eat</ion-button>
-    </ion-toolbar> -->
-    <!-- <ion-toolbar>
-     <ion-buttons slot="secondary">
-       <ion-button>
-         <ion-icon slot="icon-only" name="contact"></ion-icon>
-       </ion-button>
-       <ion-button>
-         <ion-icon slot="icon-only" name="search"></ion-icon>
-       </ion-button>
-     </ion-buttons>
-     <ion-buttons slot="primary">
-       <ion-button color="secondary">
-         <ion-icon slot="icon-only" name="more"></ion-icon>
-       </ion-button>
-     </ion-buttons>
-     <ion-title>Default Buttons</ion-title>
-   </ion-toolbar> -->
-      <!-- <ion-button>
-        Cancel
-      </ion-button> -->
-    <!-- <ion-toolbar>
-      <ion-buttons slot="secondary">
-        <ion-button>
-          <ion-icon slot="icon-only" name="contact"></ion-icon>
-        </ion-button>
-        <ion-button>
-          <ion-icon slot="icon-only" name="search"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-      <ion-label>Default Buttons</ion-label>
-      <ion-buttons slot="primary">
-        <ion-button color="secondary">
-          <ion-icon slot="icon-only" name="more"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar> -->
-  </ion-card>
+    <div v-else>
+      <ion-card>
+        <ion-card-header class="border-bottom">
+          <ion-card-title>{{preppedmeal.meal.name}}</ion-card-title>
+          <ion-card-subtitle color="primary">{{preppedmeal.meal.calories}} calories</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content style="margin-top: 12px;">
+          <MealInformation :meal='preppedmeal.meal'/>
+          <MealRecipe :meal='preppedmeal.meal' :creator='creator'/>
+          <MealExperationTimer style="padding-bottom:10px; margin-top: 16px;" :preppedmeal='preppedmeal'/>
+        </ion-card-content>
+        <div class="meal-timer">
+          <ion-label class="timer-label" primary>
+            53 minutes left
+          </ion-label>
+          <div class="timer-bar">
+            <ion-progress-bar v-bind:value="0.6"></ion-progress-bar>
+          </div>
+        </div>
+      </ion-card>
+    </div>
+  </div>
 </template>
 
 <script>
+import MealExperationTimer from '@/components/MealOverview/MealExperationTimer'
+import MealInformation from '@/components/MealOverview/MealInformation'
+import MealRecipe from '@/components/MealOverview/MealRecipe'
 
 export default {
   name: "NextMeal",
   data () {
     return {
-      value: 0.5
+      loading: true,
+      preppedmeal: undefined,
+      creator: ""
     }
   },
+  components: {
+    MealExperationTimer,
+    MealInformation,
+    MealRecipe
+  },
   methods: {
-    updateTimer: function () {
+    toRoute (route) {
+      this.$router.push(route)
+    },
+    updateTimer () {
       var self = this;
       this.value += 0.1;
       if(this.value > 1.00){
@@ -94,8 +68,22 @@ export default {
       // setTimeout(function(){ self.updateTimer() }, 200);
     }
   },
-  created: function () {
-    this.updateTimer();
+  created () {
+    // this.updateTimer();
+    this.loading = true
+    this.$store.dispatch("fetchNextMeal", {'user' : {'id' : this.$store.state.user._id}})
+      .then((response) => {
+        if(response.data.length == 0){
+          this.loading = false
+        } else {
+          this.preppedmeal = response.data
+          this.$store.dispatch("fetchMeal", {'id': this.preppedmeal.meal._id})
+          .then((response) => {
+            this.creator = response.data.created_by.name.first + " " + response.data.created_by.name.last
+            this.loading = false
+          })
+        }
+      })
   }
 }
 </script>
