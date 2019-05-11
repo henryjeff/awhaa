@@ -83,7 +83,8 @@ export default {
       this.$router.push(route)
     },
     addMeal(){
-      EventBus.$emit('start-loading', {'self':this, 'redirect':'/meals/search'})
+      this.$router.push("/meals/search")
+      EventBus.$emit('start-loading', {'self':this})
       var preppedmeal = {
         "preppedmeal": {
           "user_id": this.$store.state.user._id,
