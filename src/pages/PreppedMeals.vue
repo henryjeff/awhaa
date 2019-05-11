@@ -16,7 +16,26 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="content" padding>
-      <div v-if="meals.length === 0">
+      <ion-segment class="border-bottom">
+        <ion-segment-button checked v-if="showing == 'avalible'">
+          <ion-label>Avalible Meals</ion-label>
+        </ion-segment-button>
+        <ion-segment-button @click="updateMeals('avalible')" v-else-if="showing == 'archive'">
+          <ion-label>Avalible Meals</ion-label>
+        </ion-segment-button>
+        <ion-segment-button checked v-if="showing == 'archive'">
+          <ion-label>Eaten Meals</ion-label>
+        </ion-segment-button>
+        <ion-segment-button @click="updateMeals('archive')" v-else-if="showing == 'avalible'">
+          <ion-label>Eaten Meals</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <hr>
+      <hr>
+      <div v-if="loading === true">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+      </div>
+      <div v-else-if="meals.length === 0">
         <ion-card-subtitle>No meals found...</ion-card-subtitle>
       </div>
       <div v-else-if="meals !== []" v-for="(meal, index) in meals" v-bind:key="index">
@@ -36,6 +55,7 @@ export default {
   data() {
     return {
       loading: true,
+      showing: "avalible",
       meals: []
     }
   },
@@ -43,15 +63,23 @@ export default {
     PreppedMealPreview
   },
   created() {
-    this.fetchAllPreppedMeals()
+    this.fetchAllPreppedMeals(false)
   },
   methods: {
     toRoute(route) {
       this.$router.push(route);
     },
-    fetchAllPreppedMeals() {
-      // EventBus.$emit('start-loading', {'self':this})
-      this.$store.dispatch("fetchPreppedMeals", {'user':{'id':this.$store.state.user._id}})
+    updateMeals(e) {
+      this.showing = e
+      if(e == "avalible"){
+        this.fetchAllPreppedMeals(false)
+      } else {
+        this.fetchAllPreppedMeals(true)
+      }
+    },
+    fetchAllPreppedMeals(eaten) {
+      this.loading = true
+      this.$store.dispatch("fetchPreppedMeals", {'user' : {'id' : this.$store.state.user._id}, 'eaten' : eaten})
         .then((response) => {
           this.loading = false
           this.meals = response.data
