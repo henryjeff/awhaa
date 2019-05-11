@@ -118,14 +118,50 @@ export const store = new Vuex.Store({
           })
       })
     },
+    async updatePreppedMeal({commit}, payload){
+      return new Promise((resolve, reject) => {
+        axios.put(`/api/mymeals/id/${payload.preppedmeal._id}/update`, payload.update)
+          .then((response) => {
+            resolve(response)
+          })
+          .catch((errors) => {
+            router.push('/error/ERR_DB_UPDATE_PREPPED_MEAL')
+            reject(errors)
+          })
+      })
+    },
+    async deletePreppedMeal({commit}, payload){
+      return new Promise((resolve, reject) => {
+        axios.delete(`/api/mymeals/id/${payload.preppedmeal._id}`)
+          .then((response) => {
+            resolve(response)
+          })
+          .catch((errors) => {
+            router.push('/error/ERR_DB_UPDATE_PREPPED_MEAL')
+            reject(errors)
+          })
+      })
+    },
     async fetchPreppedMeals({commit}, payload){
       return new Promise((resolve, reject) => {
-        axios.get(`/api/mymeals/inventory/${payload.user.id}`)
+        axios.get(`/api/mymeals/inventory/${payload.user.id}?eaten=${payload.eaten}`)
           .then((response) => {
             resolve(response)
           })
           .catch((errors) => {
             router.push('/error/ERR_DB_FETCH_INVENTORY')
+            reject(errors)
+          })
+      })
+    },
+    async fetchNextMeal({commit}, payload){
+      return new Promise((resolve, reject) => {
+        axios.get(`/api/mymeals/id/${payload.user.id}/next`)
+          .then((response) => {
+            resolve(response)
+          })
+          .catch((errors) => {
+            router.push('/error/ERR_DB_FETCH_NEXT_MEAL')
             reject(errors)
           })
       })
