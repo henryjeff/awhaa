@@ -8,6 +8,6 @@
 
 <script>
 export default {
-  name: "MealInformation",
+  name: "MealNotes",
 }
 </script>
