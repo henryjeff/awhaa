@@ -17,9 +17,12 @@ var PreppedMeal = new Schema({
     },
     by: Date,
   },
-  eaten: {
-    type: Boolean,
-    default: false
+  eaten:{
+    status: {
+      type: Boolean,
+      default: false
+    },
+    on: Date
   },
   notes: String
 });
