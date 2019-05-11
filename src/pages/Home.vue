@@ -21,8 +21,8 @@
           <ion-icon name="restaurant"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
-          <ion-fab-button><ion-icon name="add" @click="toRoute('/meals/search')"></ion-icon></ion-fab-button>
-          <ion-fab-button><ion-icon name="create" @click="toRoute('/meals/create')"></ion-icon></ion-fab-button>
+          <ion-fab-button class="fade-in-item"><ion-icon name="add" @click="toRoute('/meals/search')"></ion-icon></ion-fab-button>
+          <ion-fab-button class="fade-in-item"><ion-icon name="create" @click="toRoute('/meals/create')"></ion-icon></ion-fab-button>
         </ion-fab-list>
       </ion-fab>
 
