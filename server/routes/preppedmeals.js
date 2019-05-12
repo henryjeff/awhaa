@@ -23,31 +23,46 @@ async function getPreppedMealData(preppedmeal) {
   })
 }
 
-function getCurrentMealTime(){
+function getCurrentMealTime() {
   var cur_time = Date(Date.now()).split(" ")[4].split(":")
   var hour = parseInt(cur_time[0])
   var min = parseInt(cur_time[1])
   var sec = parseInt(cur_time[2])
 
-  // BREAKFAST  5 - 10
-  // BRUNCH    10 - 13
-  // LUNCH     13 - 16
-  // LINNER    16 - 19
-  // DINNER    19 - 22
-  // SNACK     22 - 5
+  // BREAKFAST  5 - 10 // 5am-10am
+  // BRUNCH    10 - 13 // 10am-1pm
+  // LUNCH     13 - 16 // 1pm-4pm
+  // LINNER    16 - 19 // 4pm-7pm
+  // DINNER    19 - 22 // 7pm-10pm
+  // SNACK     22 - 5  // 10pm-5am
 
-  if        (hour >  5 && hour < 10) { // BREAKFAST
+  if        (hour >=  5 && hour < 10) { // BREAKFAST
     return "breakfast"
-  } else if (hour > 10 && hour < 13) { // BRUNCH
+  } else if (hour >= 10 && hour < 13) { // BRUNCH
     return "brunch"
-  } else if (hour > 13 && hour < 16) { // LUNCH
+  } else if (hour >= 13 && hour < 16) { // LUNCH
     return "lunch"
-  } else if (hour > 16 && hour < 19) { // LINNER
+  } else if (hour >= 16 && hour < 19) { // LINNER
     return "linner"
-  } else if (hour > 19 && hour < 22) { // DINNER
+  } else if (hour >= 19 && hour < 22) { // DINNER
     return "dinner"
   } else {                             // SNACK
     return "snack"
+  }
+}
+
+function getMealRange(meal_time) {
+  switch(meal_time) {
+    case "breakfast":
+      return [5, 10]
+    case "brunch":
+      return [10, 13]
+    case "lunch":
+      return [13, 16]
+    case "linner":
+      return [16, 19]
+    case "dinner":
+      return [19, 22]
   }
 }
 
@@ -99,6 +114,10 @@ router.get('/mymeals/id/:id/next', function(req, res, next){
   var query = {'user' : req.params.id, 'eaten.status': false}
   PreppedMeal.find(query, function(err, preppedmeals) {
     var inventory = []
+    if(preppedmeals.length == 0 || err){
+      res.send([])
+      return next()
+    }
     let requests = preppedmeals.map((preppedmeal) => {
       return new Promise((resolve) => {
         getPreppedMealData(preppedmeal)
@@ -137,10 +156,62 @@ router.get('/mymeals/id/:id/next', function(req, res, next){
         filtered_inventory.sort(compareCalories)
         filtered_inventory.sort(compareExpireDate)
 
-        var next_meal = filtered_inventory[0]
+        var meal_range = getMealRange(cur_meal_time)
 
-        res.send(next_meal)
-        return next()
+        var now = new Date()
+        var eatstart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+        var eatby = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+        eatstart.setUTCHours(meal_range[0])
+        eatby.setUTCHours(meal_range[1])
+
+
+        PreppedMeal.find({'user' : req.params.id, 'eaten.on' : {$gte : new Date(now.getFullYear(), now.getMonth(), now.getDate())}}, function(err, preppedmeals) {
+          var eaten_today = []
+          let eaten_requests = preppedmeals.map((preppedmeal) => {
+            return new Promise((resolve) => {
+              getPreppedMealData(preppedmeal)
+                .then(data => {
+                  eaten_today.push(data)
+                  resolve()
+                })
+                .catch(err => {
+                  res.send(err)
+                  return next()
+                })
+            })
+          })
+          Promise.all(eaten_requests)
+            .then(() => {
+              var next_meal = filtered_inventory[0]
+              var result = {
+                'eatstart': eatstart,
+                'eatby': eatby,
+                'preppedmeal' : next_meal,
+                'already_ate': false
+              }
+
+              eaten_today.forEach(function(preppedmeal){
+                console.log(preppedmeal.eaten.on)
+                console.log(eatstart)
+                console.log(eatby)
+                if(preppedmeal.eaten.on >= eatstart && preppedmeal.eaten.on <= eatby){
+                  console.log("already ate")
+                  result = {
+                    'eatby': eatby,
+                    'already_ate': true
+                  }
+                }
+              })
+
+              res.send(result)
+              return next()
+            })
+          .catch(() => {
+            res.send({ message: "Error finding eaten meals"})
+            return next()
+          })
+        })
       })
       .catch(() => {
         res.send({ message: "Error finding all preppared meals"})
@@ -150,7 +221,11 @@ router.get('/mymeals/id/:id/next', function(req, res, next){
 })
 
 router.put('/mymeals/id/:id/update', function(req, res, next){
-  var now = new Date(Date.now())
+  // var now = new Date(Date.now() - new Date(Date.now()).getTimezoneOffset())
+  // now.setUTCHours(now.getHours() - 4)
+  var now = new Date(Date.now()).toString().split("GMT")
+  now = new Date(now[0] + " GMT-0000")
+  console.log(now)
   PreppedMeal.findOneAndUpdate({"_id" : req.params.id}, {$set: {"eaten.status": req.body.eaten, "eaten.on": now}}, function(err, preppedmeal) {
     if (err || !preppedmeal) {
       res.send({ message: 'Error finding prepped meal' })
