@@ -25,13 +25,14 @@
           <ion-fab-button class="fade-in-item"><ion-icon name="create" @click="toRoute('/meals/create')"></ion-icon></ion-fab-button>
         </ion-fab-list>
       </ion-fab>
-
-      <ion-title>
-        Welcome back {{first_name}}
-      </ion-title>
-      <ion-title>
-        <p style="font-size:14px;">Today's going to be great!</p>
-      </ion-title>
+      <div>
+        <ion-title>
+          Welcome back {{first_name}}
+        </ion-title>
+        <ion-title>
+          <p style="font-size:14px;">Today's going to be great!</p>
+        </ion-title>
+      </div>
       <SummerCountdown/>
       <NextMeal/>
     </ion-content>
