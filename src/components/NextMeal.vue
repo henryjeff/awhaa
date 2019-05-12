@@ -1,43 +1,109 @@
 <template>
-  <div v-if="loading === false">
-    <div v-if="preppedmeal === undefined">
-      <ion-card>
-        <ion-card-header >
-          <ion-card-title>You don't have any prepared meals</ion-card-title>
-          <ion-card-subtitle>Add some meals to your inventory</ion-card-subtitle>
-          <hr>
-          <ion-button shape="round" fill="outline" primary @click="toRoute('/meals/search')">
-            Add Meals
-          </ion-button>
-        </ion-card-header>
-      </ion-card>
+  <div>
+    <div v-if="loading === false" class="fade-in-item">
+      <div v-if="preppedmeal === undefined">
+        <ion-card>
+          <ion-card-header >
+            <ion-card-title>You're out of meals</ion-card-title>
+            <ion-card-subtitle>Add some more meals to your inventory</ion-card-subtitle>
+            <hr>
+            <ion-button shape="round" fill="outline" primary @click="toRoute('/meals/search')">
+              Add Meals
+            </ion-button>
+          </ion-card-header>
+        </ion-card>
+      </div>
+      <div v-else-if="already_ate === true">
+        <ion-card>
+          <ion-card-header >
+            <ion-card-title>You're all caught up on eating</ion-card-title>
+            <ion-card-subtitle>Check in at {{formatTime(eatby)}} for your next meal</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      </div>
+      <div v-else>
+        <ion-card>
+          <ion-card-header class="border-bottom">
+            <ion-card-title>{{preppedmeal.meal.name}}</ion-card-title>
+            <ion-card-subtitle color="primary">{{preppedmeal.meal.calories}} calories</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content style="margin-top: 12px;">
+            <MealInformation :meal='preppedmeal.meal'/>
+            <MealRecipe :meal='preppedmeal.meal' :creator='creator'/>
+            <MealEatingTimer :preppedmeal='preppedmeal' :eatstart='eatstart' :eatby='eatby' style="margin-top: 16px;"/>
+          </ion-card-content>
+          <ion-card-content class="bottom-buttons">
+            <ion-buttons>
+              <ion-button class="eat-meal" shape="round" fill="outline" color="primary" @click="eatMeal()">Eat Meal</ion-button>
+              <ion-button class="postpone-one-hour" shape="round" fill="outline" color="medium" @click="deleteMeal()">Postpone Meal</ion-button>
+            </ion-buttons>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    <!-- <ion-card>
+      <ion-card-header class="border-bottom">
+        <ion-card-title><ion-skeleton-text animated style="width: 50%;height:24px;margin-left:25%;"/></ion-card-title>
+        <ion-card-subtitle color="primary"><ion-skeleton-text animated style="width: 30%;height:17px;margin-left:35%"/></ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content style="margin-top: 12px;">
+        <ion-card-subtitle style="margin-top: 13px;"><ion-skeleton-text animated style="width:40%;height:17px;margin-left:30%"/></ion-card-subtitle>
+        <ion-item class="no-item-padding">
+          <ion-grid class="no-start-padding no-end-padding">
+            <ion-row>
+              <ion-col class="col-overflow no-start-padding" align-self-start>
+                <ion-skeleton-text animated style="height: 19px; width: 100%;"/>
+              </ion-col>
+              <ion-col class="col-overflow no-end-padding">
+                <ion-skeleton-text animated style="height: 19px; width: 100%;"/>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="col-overflow no-start-padding" align-self-start>
+                <ion-skeleton-text animated style="height: 19px; width: 100%;"/>
+              </ion-col>
+              <ion-col class="col-overflow no-end-padding">
+                <ion-skeleton-text animated style="height: 19px; width: 100%;"/>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+        <ion-item class="no-item-padding">
+          <ion-label><ion-skeleton-text animated style="height: 19px; width: 100%;"/></ion-label>
+        </ion-item>
+        <ion-item class="no-item-padding rounded-item" style="margin-top: 16px;" lines="none" color="primary">
+          <ion-grid style="padding: 8px 6px 16px 6px;">
+            <ion-row>
+              <ion-col align-self-center size="12">
+                <ion-card-title class="meal-timer-header"><ion-skeleton-text animated style="height: 24px; width: 60%;margin-left:20%;"/></ion-card-title>
+              </ion-col>
+            </ion-row>
+            <ion-row style="margin-bottom: 2px;">
+              <ion-col align-self-start size="8">
+                <ion-card-subtitle><ion-skeleton-text animated style="height: 19px; width: 100%;"/></ion-card-subtitle>
+              </ion-col>
+              <ion-col align-self-end size="4">
+                <ion-card-subtitle><ion-skeleton-text animated style="height: 19px; width: 100%;"/></ion-card-subtitle>
+              </ion-col>
+            </ion-row>
+            <ion-row style="padding-left:5px;padding-right:5px;" >
+              <ion-skeleton-text animated style="height: 10px; width: 100%;"/>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-card-content>
+      </ion-card> -->
     </div>
-    <div v-else>
-      <ion-card>
-        <ion-card-header class="border-bottom">
-          <ion-card-title>{{preppedmeal.meal.name}}</ion-card-title>
-          <ion-card-subtitle color="primary">{{preppedmeal.meal.calories}} calories</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content style="margin-top: 12px;">
-          <MealInformation :meal='preppedmeal.meal'/>
-          <MealRecipe :meal='preppedmeal.meal' :creator='creator'/>
-          <MealExperationTimer style="padding-bottom:10px; margin-top: 16px;" :preppedmeal='preppedmeal'/>
-        </ion-card-content>
-        <div class="meal-timer">
-          <ion-label class="timer-label" primary>
-            53 minutes left
-          </ion-label>
-          <div class="timer-bar">
-            <ion-progress-bar v-bind:value="0.6"></ion-progress-bar>
-          </div>
-        </div>
-      </ion-card>
+    <div v-else class="margin-top:24px;">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
     </div>
   </div>
 </template>
 
 <script>
+import { EventBus } from '../events';
+
 import MealExperationTimer from '@/components/MealOverview/MealExperationTimer'
+import MealEatingTimer from '@/components/MealOverview/MealEatingTimer'
 import MealInformation from '@/components/MealOverview/MealInformation'
 import MealRecipe from '@/components/MealOverview/MealRecipe'
 
@@ -47,43 +113,77 @@ export default {
     return {
       loading: true,
       preppedmeal: undefined,
-      creator: ""
+      eatstart: undefined,
+      eatby: undefined,
+      creator: "",
+      already_ate: false
     }
   },
   components: {
     MealExperationTimer,
+    MealEatingTimer,
     MealInformation,
-    MealRecipe
+    MealRecipe,
+  },
+  mounted() {
+    EventBus.$on('new-meal-time', data => {
+      this.getNextMeal()
+    })
   },
   methods: {
     toRoute (route) {
       this.$router.push(route)
     },
-    updateTimer () {
-      var self = this;
-      this.value += 0.1;
-      if(this.value > 1.00){
-        this.value = 0;
+    eatMeal(){
+      this.loading = true
+      this.$store.dispatch("updatePreppedMeal", {"preppedmeal": this.preppedmeal, "update" : {"eaten" : true}})
+        .then((response) => {
+          EventBus.$emit('success-toast', {'message':'Successfully ate prepped meal'})
+          this.getNextMeal()
+        })
+    },
+    formatTime(date){
+      var d = date.split('T')[1].split('.')[0]
+      var am_pm = 'a.m.'
+      var hour = parseInt(d.split(':')[0])
+      if(parseInt(d.split(':')[0]) >= 12) {
+        am_pm = 'p.m.'
+        if(parseInt(d.split(':')[0]) > 12){
+          hour = parseInt(d.split(':')[0]) - 12
+        }
       }
-      // setTimeout(function(){ self.updateTimer() }, 200);
+      return hour + " " + am_pm
+    },
+    getNextMeal(){
+      this.$store.dispatch("fetchNextMeal", {'user' : {'id' : this.$store.state.user._id}})
+        .then((response) => {
+          if(response.data.length == 0){
+            this.loading = false
+            this.preppedmeal = undefined
+          } else {
+            if(response.data.already_ate == true){
+              this.already_ate = response.data.already_ate
+              this.eatby = response.data.eatby
+              this.loading = false
+              this.preppedmeal = ""
+            } else {
+              this.already_ate = response.data.already_ate
+              this.preppedmeal = response.data.preppedmeal
+              this.eatstart = response.data.eatstart
+              this.eatby = response.data.eatby
+              this.$store.dispatch("fetchMeal", {'id': this.preppedmeal.meal._id})
+              .then((response) => {
+                this.creator = response.data.created_by.name.first + " " + response.data.created_by.name.last
+                this.loading = false
+              })
+            }
+          }
+        })
     }
   },
   created () {
-    // this.updateTimer();
     this.loading = true
-    this.$store.dispatch("fetchNextMeal", {'user' : {'id' : this.$store.state.user._id}})
-      .then((response) => {
-        if(response.data.length == 0){
-          this.loading = false
-        } else {
-          this.preppedmeal = response.data
-          this.$store.dispatch("fetchMeal", {'id': this.preppedmeal.meal._id})
-          .then((response) => {
-            this.creator = response.data.created_by.name.first + " " + response.data.created_by.name.last
-            this.loading = false
-          })
-        }
-      })
+    this.getNextMeal()
   }
 }
 </script>
@@ -92,26 +192,18 @@ export default {
   border-radius: 10px;
   text-align: left;
 }
-
 .progress-bar-determinate{
   height: 5px;
   border-radius: 10px;
 }
-
-.meal-timer {
-  border-top: 1px solid #dddddd;
-  padding-top: 10px;
+.postpone-one-hour{
+  padding-left: 5px;
+  width: 100%;
+  height: 30px;
 }
-
-.timer-label{
-  color: #3880ff;
-  margin-bottom: 4px;
-  padding-left: 16px;
+.eat-meal{
+  padding-right: 5px;
+  width: 100%;
+  height: 30px;
 }
-
-.timer-bar{
-  margin:16px;
-  margin-top: 7px;
-}
-
 </style>
