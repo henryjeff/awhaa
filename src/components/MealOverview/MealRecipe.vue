@@ -1,10 +1,10 @@
 <template>
   <div>
-    <ion-item href="#" @click="toggleRecipe()" v-if="steps_hidden">
+    <ion-item class="no-item-padding" href="#" @click="toggleRecipe()" v-if="steps_hidden">
       <ion-icon name="restaurant" slot="start"></ion-icon>
       <ion-label>View full recipe / prep steps</ion-label>
     </ion-item>
-    <ion-item href="#" @click="toggleRecipe()" v-else>
+    <ion-item class="no-item-padding" href="#" @click="toggleRecipe()" v-else>
       <ion-icon name="arrow-dropup" slot="start"></ion-icon>
       <ion-label>Hide recipe / prep steps</ion-label>
     </ion-item>
