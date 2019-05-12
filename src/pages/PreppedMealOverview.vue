@@ -109,23 +109,6 @@ export default {
           this.loading = false
         })
     },
-    // removeMeal(data){
-    //   EventBus.$emit('start-loading', {'self':this, 'redirect':'/meals/search'})
-    //   var preppedmeal = {
-    //     "preppedmeal": {
-    //       "user_id": this.$store.state.user._id,
-    //       "meal_id": this.meal._id,
-    //       "shelf_life": this.meal.shelf_life,
-    //       "notes": this.notes,
-    //       "num_meals": this.num_meals
-    //     }
-    //   }
-    //   this.$store.dispatch("postPreppedMeal", preppedmeal)
-    //     .then((response) => {
-    //       EventBus.$emit('success-toast', {'message':'Successfully added prepped meal(s) to your inventory'})
-    //       this.loading = false
-    //     })
-    // }
   }
 }
 </script>
