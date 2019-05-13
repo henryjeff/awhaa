@@ -40,58 +40,6 @@
           </ion-card-content>
         </ion-card>
       </div>
-    <!-- <ion-card>
-      <ion-card-header class="border-bottom">
-        <ion-card-title><ion-skeleton-text animated style="width: 50%;height:24px;margin-left:25%;"/></ion-card-title>
-        <ion-card-subtitle color="primary"><ion-skeleton-text animated style="width: 30%;height:17px;margin-left:35%"/></ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content style="margin-top: 12px;">
-        <ion-card-subtitle style="margin-top: 13px;"><ion-skeleton-text animated style="width:40%;height:17px;margin-left:30%"/></ion-card-subtitle>
-        <ion-item class="no-item-padding">
-          <ion-grid class="no-start-padding no-end-padding">
-            <ion-row>
-              <ion-col class="col-overflow no-start-padding" align-self-start>
-                <ion-skeleton-text animated style="height: 19px; width: 100%;"/>
-              </ion-col>
-              <ion-col class="col-overflow no-end-padding">
-                <ion-skeleton-text animated style="height: 19px; width: 100%;"/>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col class="col-overflow no-start-padding" align-self-start>
-                <ion-skeleton-text animated style="height: 19px; width: 100%;"/>
-              </ion-col>
-              <ion-col class="col-overflow no-end-padding">
-                <ion-skeleton-text animated style="height: 19px; width: 100%;"/>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-        <ion-item class="no-item-padding">
-          <ion-label><ion-skeleton-text animated style="height: 19px; width: 100%;"/></ion-label>
-        </ion-item>
-        <ion-item class="no-item-padding rounded-item" style="margin-top: 16px;" lines="none" color="primary">
-          <ion-grid style="padding: 8px 6px 16px 6px;">
-            <ion-row>
-              <ion-col align-self-center size="12">
-                <ion-card-title class="meal-timer-header"><ion-skeleton-text animated style="height: 24px; width: 60%;margin-left:20%;"/></ion-card-title>
-              </ion-col>
-            </ion-row>
-            <ion-row style="margin-bottom: 2px;">
-              <ion-col align-self-start size="8">
-                <ion-card-subtitle><ion-skeleton-text animated style="height: 19px; width: 100%;"/></ion-card-subtitle>
-              </ion-col>
-              <ion-col align-self-end size="4">
-                <ion-card-subtitle><ion-skeleton-text animated style="height: 19px; width: 100%;"/></ion-card-subtitle>
-              </ion-col>
-            </ion-row>
-            <ion-row style="padding-left:5px;padding-right:5px;" >
-              <ion-skeleton-text animated style="height: 10px; width: 100%;"/>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-      </ion-card-content>
-      </ion-card> -->
     </div>
     <div v-else class="margin-top:24px;">
       <ion-spinner name="crescent" color="primary"></ion-spinner>
@@ -157,7 +105,9 @@ export default {
     getNextMeal(){
       this.$store.dispatch("fetchNextMeal", {'user' : {'id' : this.$store.state.user._id}})
         .then((response) => {
-          if(response.data.length == 0){
+          if(response.data.message != undefined){
+            this.$router.push("/error/ERR_DB_NEXT_MEAL")
+          } else if(response.data.length == 0){
             this.loading = false
             this.preppedmeal = undefined
           } else {
