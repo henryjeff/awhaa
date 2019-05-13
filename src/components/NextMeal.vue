@@ -35,7 +35,7 @@
           <ion-card-content class="bottom-buttons">
             <ion-buttons>
               <ion-button class="eat-meal" shape="round" fill="outline" color="primary" @click="eatMeal()">Eat Meal</ion-button>
-              <ion-button class="postpone-one-hour" shape="round" fill="outline" color="medium" @click="deleteMeal()">Postpone Meal</ion-button>
+              <!-- <ion-button class="postpone-one-hour" shape="round" fill="outline" color="medium" @click="deleteMeal()">Postpone Meal</ion-button> -->
             </ion-buttons>
           </ion-card-content>
         </ion-card>
