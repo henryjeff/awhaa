@@ -63,6 +63,8 @@ function getMealRange(meal_time) {
       return [16, 19]
     case "dinner":
       return [19, 22]
+    case "snack":
+      return[22, 29]
   }
 }
 
