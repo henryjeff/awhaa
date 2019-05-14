@@ -1,5 +1,6 @@
 <template>
   <div>
+    <script src="https://apis.google.com/js/api:client.js"></script>
     <div v-on:start-loading="si()"/>
     <ion-button shape="round" fill="outline">
       <g-signin-button
