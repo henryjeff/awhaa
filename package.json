@@ -6,7 +6,7 @@
     "start": "node ./server/bin/www",
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "rundev": "npm run dev",
-    "build": "node build/build.js"
+    "build": "vue-cli-service build"
   },
   "dependencies": {
     "@ionic/vue": "0.0.4",
