@@ -6,7 +6,13 @@ const logger = require('morgan');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 
-const mongo_uri = require('../config/.env').MONGODB_URI
+var mongo_uri
+
+try {
+  mongo_uri = require('../config/.env').MONGODB_URI
+} catch(e) {
+  mongo_uri = require('../config/.heroku.env').MONGODB_URI
+}
 
 var routes = require('./routes.js')
 
