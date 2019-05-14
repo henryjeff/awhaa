@@ -1,0 +1,7 @@
+{
+  "name": "awhaa",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "custom"
+}
