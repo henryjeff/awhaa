@@ -11,7 +11,7 @@ var mongo_uri
 try {
   mongo_uri = require('../config/.env').MONGODB_URI
 } catch(e) {
-  mongo_uri = require('../config/.heroku.env').MONGODB_URI
+  mongo_uri = require('../config/heroku.env').MONGODB_URI
 }
 
 var routes = require('./routes.js')
