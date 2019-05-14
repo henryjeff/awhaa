@@ -37,9 +37,12 @@ var d_time = (process.hrtime()[1] - s_time) / 100000;
 console.log("Connected to cluster")
 console.log(`Connecition established in ${d_time} ms`)
 
-// app.use('/', )
 app.use('/api', routes.users)
 app.use('/api', routes.meals)
 app.use('/api', routes.preppedmeals)
+
+app.get('*', function(req, res){
+  res.redirect('/');
+});
 
 module.exports = app;
