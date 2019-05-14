@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from "axios";
-// import createPersistedState from 'vuex-persistedstate'
-// import * as Cookies from 'js-cookie'
+
+// axios.defaults.baseURL = 'http://localhost:3000'
+// axios.defaults.withCredentials = false;
+
 import router from '../router/'
 
 Vue.use(Vuex)

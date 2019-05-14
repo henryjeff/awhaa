@@ -36,7 +36,7 @@ function getCurrentMealTime() {
   // DINNER    19 - 22 // 7pm-10pm
   // SNACK     22 - 5  // 10pm-5am
 
-  if        (hour >=  5 && hour < 10) { // BREAKFAST
+  if        (hour >=  0 && hour < 10) { // BREAKFAST
     return "breakfast"
   } else if (hour >= 10 && hour < 13) { // BRUNCH
     return "brunch"
@@ -54,7 +54,7 @@ function getCurrentMealTime() {
 function getMealRange(meal_time) {
   switch(meal_time) {
     case "breakfast":
-      return [5, 10]
+      return [0, 10]
     case "brunch":
       return [10, 13]
     case "lunch":
@@ -64,7 +64,7 @@ function getMealRange(meal_time) {
     case "dinner":
       return [19, 22]
     case "snack":
-      return[22, 29]
+      return[22, 24]
   }
 }
 
