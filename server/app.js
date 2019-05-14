@@ -23,7 +23,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(express.static(path.join(__dirname, "../dist")));
 
 var mongoose = require('mongoose');
@@ -38,6 +37,7 @@ var d_time = (process.hrtime()[1] - s_time) / 100000;
 console.log("Connected to cluster")
 console.log(`Connecition established in ${d_time} ms`)
 
+// app.use('/', )
 app.use('/api', routes.users)
 app.use('/api', routes.meals)
 app.use('/api', routes.preppedmeals)

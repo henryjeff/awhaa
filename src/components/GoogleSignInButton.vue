@@ -1,7 +1,5 @@
 <template>
   <div>
-    <script src="https://apis.google.com/js/api:client.js"></script>
-    <div v-on:start-loading="si()"/>
     <ion-button shape="round" fill="outline">
       <g-signin-button
         :params="googleSignInParams"
@@ -22,7 +20,7 @@ export default {
   data () {
     return {
       googleSignInParams: {
-        client_id: '889061426778-8stvujmooeeuduncj5f3ouiep7iplt1r.apps.googleusercontent.com'
+        client_id: '545181652990-3s3ti617tfo48c2118usqn2c6ct8ep3d.apps.googleusercontent.com'
       },
       loading: false
     }
