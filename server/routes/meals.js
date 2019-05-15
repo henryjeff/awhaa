@@ -10,16 +10,16 @@ router.get('/meals/id/:id/', function(req, res, next){
   Meal.findById(id, function(err, meal) {
     if (err || !meal) {
       res.send({ message: 'Error finding prepped meal' })
-      return next()
+      return
     }
     User.findById(meal.created_by, function(err, user) {
       if (err || !user) {
         res.send({ message: 'Error finding user' })
-        return next()
+        return
       }
       meal.created_by = user
       res.send(meal)
-      return next()
+      return
     })
   })
 })
@@ -29,14 +29,14 @@ router.get('/meals/search', function(req, res, next){
   Meal.find({name: {$regex: req.query.name, $options: "$i"}}, function(err, meals) {
     if (err) {
       res.send({ message: 'Error finding meals' })
-      return next()
+      return
     }
     if(meals == []){
       res.send({ message: 'No meals found' })
-      return next()
+      return
     }
     res.send(meals)
-    return next()
+    return
   })
 })
 

@@ -23,7 +23,19 @@ async function getPreppedMealData(preppedmeal) {
   })
 }
 
+function getDateNow() {
+  var date = new Date(Date.now())
+  var now = new Date(Date.now()).toString().split("GMT")
+  now = new Date(now[0] + " GMT-0000")
+  console.log("__________________________________________")
+  console.log("DATE:\t" + date)
+  console.log("NOW :\t" + now)
+  console.log("__________________________________________")
+}
+
 function getCurrentMealTime() {
+  getDateNow()
+
   var cur_time = Date(Date.now()).split(" ")[4].split(":")
   var hour = parseInt(cur_time[0])
   var min = parseInt(cur_time[1])
@@ -98,16 +110,16 @@ router.get('/mymeals/id/:id', function(req, res, next){
   PreppedMeal.findById(req.params.id, function(err, preppedmeal) {
     if (err || !preppedmeal) {
       res.send({ message: 'Error finding prepped meal' })
-      return next()
+      return
     }
     getPreppedMealData(preppedmeal)
       .then(data => {
         res.send(data)
-        return next()
+        return
       })
       .catch(err => {
         res.send(err)
-        return next()
+        return
       })
   })
 })
@@ -118,7 +130,7 @@ router.get('/mymeals/id/:id/next', function(req, res, next){
     var inventory = []
     if(preppedmeals.length == 0 || err){
       res.send([])
-      return next()
+      return
     }
     let requests = preppedmeals.map((preppedmeal) => {
       return new Promise((resolve) => {
@@ -129,7 +141,7 @@ router.get('/mymeals/id/:id/next', function(req, res, next){
           })
           .catch(err => {
             res.send(err)
-            return next()
+            return
           })
       })
     })
@@ -140,7 +152,7 @@ router.get('/mymeals/id/:id/next', function(req, res, next){
 
         if(inventory.length == 0){
           res.send([])
-          return next()
+          return
         }
 
         inventory.forEach(function(preppedmeal){
@@ -179,7 +191,7 @@ router.get('/mymeals/id/:id/next', function(req, res, next){
                 })
                 .catch(err => {
                   res.send(err)
-                  return next()
+                  return
                 })
             })
           })
@@ -207,40 +219,39 @@ router.get('/mymeals/id/:id/next', function(req, res, next){
               })
 
               res.send(result)
-              return next()
+              return
             })
           .catch(() => {
             res.send({ message: "Error finding eaten meals"})
-            return next()
+            return
           })
         })
       })
       .catch(() => {
         res.send({ message: "Error finding all preppared meals"})
-        return next()
+        return
       })
   })
 })
 
 router.put('/mymeals/id/:id/update', function(req, res, next){
-  // var now = new Date(Date.now() - new Date(Date.now()).getTimezoneOffset())
-  // now.setUTCHours(now.getHours() - 4)
+  getDateNow()
   var now = new Date(Date.now()).toString().split("GMT")
   now = new Date(now[0] + " GMT-0000")
   console.log(now)
   PreppedMeal.findOneAndUpdate({"_id" : req.params.id}, {$set: {"eaten.status": req.body.eaten, "eaten.on": now}}, function(err, preppedmeal) {
     if (err || !preppedmeal) {
       res.send({ message: 'Error finding prepped meal' })
-      return next()
+      return
     }
     getPreppedMealData(preppedmeal)
       .then(data => {
         res.send(data)
-        return next()
+        return
       })
       .catch(err => {
         res.send(err)
-        return next()
+        return
       })
   })
 })
@@ -249,10 +260,10 @@ router.delete('/mymeals/id/:id', function(req, res, next){
   PreppedMeal.findByIdAndRemove(req.params.id, function(err) {
     if (err) {
       res.send({ message: 'Error deleteing prepped meal' })
-      return next()
+      return
     }
     res.send({ message: 'Successfully deleted meal'})
-    return next()
+    return
   })
 })
 
@@ -273,18 +284,18 @@ router.get('/mymeals/inventory/:id', function(req, res, next){
           })
           .catch(err => {
             res.send(err)
-            return next()
+            return
           })
       })
     })
     Promise.all(requests)
       .then(() => {
         res.send(inventory)
-        return next()
+        return
       })
       .catch(() => {
         res.send({ message: "Error finding all preppared meals"})
-        return next()
+        return
       })
   })
 })
@@ -294,13 +305,14 @@ router.post('/mymeals/', function(req, res, next){
   User.findById(req.body.user_id, function(err, user) {
     if (err || !user) {
       res.send({ message: 'Error finding user -> Can\'t create meal' })
-      return next()
+      return
     }
     Meal.findById(req.body.meal_id, function(err, meal) {
       if (err || !meal) {
         res.send({ message: 'Error finding meal -> Can\'t create meal' })
-        return next()
+        return
       }
+      getDateNow()
       var by_date = new Date(Date.now())
       by_date.setDate(by_date.getDate() + req.body.shelf_life);
 
@@ -321,7 +333,7 @@ router.post('/mymeals/', function(req, res, next){
         preppedmeal.save(function(err) {
           if(err) {
             res.send(err);
-            return next()
+            return
           }
         })
       }
@@ -330,7 +342,7 @@ router.post('/mymeals/', function(req, res, next){
       } else {
         res.send({ message: req.body.num_meals + ' Prepped Meal created'})
       }
-      return next()
+      return
     })
   })
 })

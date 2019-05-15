@@ -7,10 +7,10 @@ router.get('/users/gid/:gid/', function(req, res, next){
   User.findOne({gid : req.params.gid}, function(err, user) {
     if (err || !user) {
       res.send({ message: 'Error finding user' });
-      return next()
+      return
     }
     res.send(user);
-    return next()
+    return
   });
 })
 
@@ -18,10 +18,10 @@ router.get('/users/id/:id/', function(req, res, next){
   User.findById(req.params.id, function(err, user) {
     if (err || !user) {
       res.send({ message: 'Error finding user' });
-      return next()
+      return
     }
     res.send(user);
-    return next()
+    return
   });
 })
 
@@ -41,7 +41,7 @@ router.post('/users/', function(req, res, next){
     } else {
       res.send({ message: 'User created' });
     }
-    return next()
+    return
   })
 })
 
