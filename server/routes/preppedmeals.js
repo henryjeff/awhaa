@@ -25,7 +25,7 @@ async function getPreppedMealData(preppedmeal) {
 
 function getDateNow() {
   var now = new Date(Date.now()).toString().split("GMT")
-  now = new Date(now[0] + " GMT-0000")
+  now = new Date(now[0] + " GMT+0400")
   console.log("______________________________________________________")
   console.log(now)
   return now
