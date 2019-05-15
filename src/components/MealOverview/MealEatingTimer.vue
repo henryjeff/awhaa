@@ -46,7 +46,8 @@ export default {
   },
   methods: {
     updateTimer(){
-      var now = new Date(Date.now())
+      var now = new Date(Date.now()).toString().split("GMT")
+      now = new Date(now[0] + " GMT-0400")
       var eatstart = this.eatstart
       var eatby = this.eatby
 
@@ -85,15 +86,21 @@ export default {
       return hour + " " + am_pm
     },
     getDiffSeconds(date_a, date_b){
-      var da = new Date(date_a)
-      var db = new Date(date_b)
+      var da
+      var db
       if(typeof date_a != typeof new Date()){
         var hour_a = date_a.split('T')[1].split('.')[0].split(':')[0]
-        da = new Date(date_a.split('T')[0] + " " + (hour_a - 1) + ":00:00 EST")
+        if(hour_a > 0) hour_a = hour_a - 1
+        da = new Date(date_a.split('T')[0] + " " + (hour_a) + ":00:00 EST")
+      } else {
+        da = new Date(date_a)
       }
       if(typeof date_b != typeof new Date()){
         var hour_b = date_b.split('T')[1].split('.')[0].split(':')[0]
-        db = new Date(date_b.split('T')[0]  + " " + (hour_b - 1) + ":00:00 EST")
+        if(hour_b > 0) hour_b = hour_b - 1
+        db = new Date(date_b.split('T')[0]  + " " + (hour_b) + ":00:00 EST")
+      } else {
+        db = new Date(date_b)
       }
       var diffTime = Math.abs(da.getTime() - db.getTime())
       var diffSecs = Math.ceil(diffTime / (1000))

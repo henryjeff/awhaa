@@ -24,19 +24,15 @@ async function getPreppedMealData(preppedmeal) {
 }
 
 function getDateNow() {
-  var date = new Date(Date.now())
   var now = new Date(Date.now()).toString().split("GMT")
-  now = new Date(now[0] + " GMT-0000")
-  console.log("__________________________________________")
-  console.log("DATE:\t" + date)
-  console.log("NOW :\t" + now)
-  console.log("__________________________________________")
+  now = new Date(now[0] + " GMT-0400")
+  console.log("______________________________________________________")
+  console.log(now)
+  return now
 }
 
 function getCurrentMealTime() {
-  getDateNow()
-
-  var cur_time = Date(Date.now()).split(" ")[4].split(":")
+  var cur_time = getDateNow().toString().split(" ")[4].split(":")
   var hour = parseInt(cur_time[0])
   var min = parseInt(cur_time[1])
   var sec = parseInt(cur_time[2])
@@ -172,7 +168,8 @@ router.get('/mymeals/id/:id/next', function(req, res, next){
 
         var meal_range = getMealRange(cur_meal_time)
 
-        var now = new Date()
+        // var now = new Date()
+        var now = getDateNow()
         var eatstart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
         var eatby = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
@@ -235,10 +232,11 @@ router.get('/mymeals/id/:id/next', function(req, res, next){
 })
 
 router.put('/mymeals/id/:id/update', function(req, res, next){
-  getDateNow()
-  var now = new Date(Date.now()).toString().split("GMT")
-  now = new Date(now[0] + " GMT-0000")
-  console.log(now)
+  // getDateNow()
+  // var now = new Date(Date.now()).toString().split("GMT")
+  // now = new Date(now[0] + " GMT-0000")
+  var now = getDateNow()
+  // console.log(now)
   PreppedMeal.findOneAndUpdate({"_id" : req.params.id}, {$set: {"eaten.status": req.body.eaten, "eaten.on": now}}, function(err, preppedmeal) {
     if (err || !preppedmeal) {
       res.send({ message: 'Error finding prepped meal' })
@@ -312,8 +310,9 @@ router.post('/mymeals/', function(req, res, next){
         res.send({ message: 'Error finding meal -> Can\'t create meal' })
         return
       }
-      getDateNow()
-      var by_date = new Date(Date.now())
+      // getDateNow()
+      // var by_date = new Date(Date.now())
+      var by_date = getDateNow()
       by_date.setDate(by_date.getDate() + req.body.shelf_life);
 
       var num_meals = req.body.num_meals
