@@ -1,6 +1,15 @@
 var router = require('express').Router();
 var mongoose = require('mongoose');
 
+var PRODUCTION = false
+
+try {
+  var mongo_uri = require('../../config/.env').MONGODB_URI
+} catch(e) {
+  mongo_uri = require('../../config/heroku.env').MONGODB_URI
+  PRODUCTION = true
+}
+
 var User = require('../models/user.js')
 var Meal = require('../models/meal.js');
 var PreppedMeal = require('../models/preppedmeal.js');
@@ -25,8 +34,13 @@ async function getPreppedMealData(preppedmeal) {
 
 function getDateNow() {
   var now = new Date(Date.now()).toString().split("GMT")
-  now = new Date(now[0] + " GMT+0400") // HEROKU
-  // now = new Date(now[0] + " GMT-0000") // LOCAL MACHINE
+  if(PRODUCTION){
+    console.log("in production")
+    now = new Date(now[0] + " GMT+0400") // HEROKU
+  } else {
+    console.log("in dev")
+    now = new Date(now[0] + " GMT-0400") // LOCAL MACHINE
+  }
   return now
 }
 
