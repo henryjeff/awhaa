@@ -34,28 +34,33 @@ export default {
   },
   methods: {
     async checkSession() {
-      console.log("checking session")
-      if(!this.$session.exists()){
-        console.log("session doesn't exist")
+      // console.log("checking session")
+      if(!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
         this.loading = false
-        this.$router.push("/");
-        return
+        this.$router.push("/desktop")
       } else {
-        if(this.$session.get('session_id') == undefined){
-          console.log("session is bad")
+        if(!this.$session.exists()){
+          // console.log("session doesn't exist")
           this.loading = false
-          this.$session.destroy()
           this.$router.push("/")
-        } else if (this.$session.get('session_id') != undefined && this.$store.state.user == undefined) {
-          let self = this
-          this.$store.dispatch("fetchUser", { 'user' : {gid : this.$session.get('session_id')}, 'signin' : true})
-            .then((response) => {
-              this.loading = false
-              console.log("refreshed user")
-            })
+          return
         } else {
-          this.loading = false
-          console.log("all else is good")
+          if(this.$session.get('session_id') == undefined){
+            // console.log("session is bad")
+            this.loading = false
+            this.$session.destroy()
+            this.$router.push("/")
+          } else if (this.$session.get('session_id') != undefined && this.$store.state.user == undefined) {
+            let self = this
+            this.$store.dispatch("fetchUser", { 'user' : {gid : this.$session.get('session_id')}, 'signin' : true})
+              .then((response) => {
+                this.loading = false
+                // console.log("refreshed user")
+              })
+          } else {
+            this.loading = false
+            // console.log("all else is good")
+          }
         }
       }
     },

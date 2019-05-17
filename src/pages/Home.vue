@@ -16,6 +16,9 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="content" padding>
+      <ion-refresher slot="fixed" @ionRefresh="RefreshHome($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing..."/>
+      </ion-refresher>
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button>
           <ion-icon name="restaurant"></ion-icon>
@@ -34,7 +37,7 @@
         </ion-title>
       </div>
       <SummerCountdown/>
-      <NextMeal/>
+      <NextMeal :key="refreshKey"/>
     </ion-content>
   </div>
 </template>
@@ -52,7 +55,8 @@ export default {
     return {
       loading: true,
       first_name: "",
-      popover: undefined
+      popover: undefined,
+      refreshKey: 0
     }
   },
   created() {
@@ -73,6 +77,12 @@ export default {
         this.popover.present()
       })
     },
+    RefreshHome(event) {
+      this.refreshKey += 1
+      setTimeout(() => {
+        event.target.complete();
+      }, 1000);
+    },
     toUserSettings() {
       this.$router.push(`/user/${this.$store.state.user.username}`)
     },
@@ -90,3 +100,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.refresher-pulling-icon,
+.refresher-refreshing > .refresher-refreshing-icon > .spinner-crescent{
+  color: #3880FF!important
+}
+</style>

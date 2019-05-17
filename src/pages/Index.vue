@@ -7,6 +7,8 @@
     </ion-header>
     <ion-content class="content" padding>
       <ion-container>
+        <ion-title>Welcome to Awhaa</ion-title>
+        <p>The one stop solution to organizing your health</p>
         <ion-button shape="round" fill="outline" @click="goToSignIn">Sign In</ion-button>
       </ion-container>
     </ion-content>

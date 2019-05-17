@@ -5,6 +5,7 @@ import SignIn from '@/pages/SignIn'
 import SignOut from '@/pages/SignOut'
 import Home from '@/pages/Home'
 import Error from '@/pages/Error'
+import Desktop from '@/pages/Desktop'
 import CreateMeal from '@/pages/CreateMeal'
 import MealsSearch from '@/pages/MealsSearch'
 import UserSettings from '@/pages/UserSettings'
@@ -23,6 +24,11 @@ export default new IonicVueRouter({
       path: '/',
       name: 'Index',
       component: Index
+    },
+    {
+      path: '/desktop',
+      name: 'Desktop',
+      component: Desktop
     },
     {
       path: '/signin',

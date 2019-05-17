@@ -32,8 +32,8 @@
 }
 
 .fade-in-item {
-  -webkit-animation: fadein 400ms!important;
-   animation: fadein 400ms!important;
+  -webkit-animation: fadein 500ms!important;
+   animation: fadein 500ms!important;
 }
 
 @keyframes fadein {
