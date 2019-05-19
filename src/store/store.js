@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from "axios";
 
-// axios.defaults.baseURL = 'http://localhost:3000'// ONLY FOR DEV USE
+axios.defaults.baseURL = 'http://localhost:3000'// ONLY FOR DEV USE
 
 import router from '../router/'
 
